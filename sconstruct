@@ -1,0 +1,35 @@
+# -*- python -*-
+
+vars = Variables()
+
+vars.Add(
+	EnumVariable('BUILD_TYPE', 'Set build type', 'debug',
+		allowed_values=('debug_max', 'debug', 'release_debug', 'release'),
+		ignorecase=2)
+)
+
+env = Environment(variables = vars)
+env.Append(CCFLAGS='-Wall -Wno-unused-function -Werror')
+env.Append(CXXFLAGS='-std=c++17')
+
+if env['BUILD_TYPE'] == 'debug_max':
+    env.Append(CPPDEFINES=['DEBUG_MAX'])
+    env.Append(CXXFLAGS='-ggdb -O0')
+elif env['BUILD_TYPE'] == 'debug':
+    env.Append(CPPDEFINES=['DEBUG'])
+    env.Append(CXXFLAGS='-ggdb -O1')
+elif env['BUILD_TYPE'] == 'release_debug':
+    env.Append(CPPDEFINES=['RELEASE_DEBUG'])
+    env.Append(CXXFLAGS='-g -O2')
+elif env['BUILD_TYPE'] == 'release':
+    env.Append(CPPDEFINES=['RELEASE', 'NDEBUG'])
+    env.Append(CXXFLAGS='-g0 -s -O5 -ffast-math')
+
+# NOTE: only need the static linkage on mingw64 for boost_filesystem & its dependency, boost_system. otherwise, we can remove it.
+env.Append(LINKFLAGS='-static')
+
+Help(vars.GenerateHelpText(env))
+Export('env')
+
+SConscript('src/sconscript', variant_dir='build', duplicate=0)
+SConscript('tests/sconscript')

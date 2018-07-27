@@ -1,0 +1,21 @@
+{
+    "folders":
+    [
+        {
+            "path": "."
+        }
+    ],
+    "settings":
+    {
+        "default_encoding": "UTF-8",
+        "fallback_encoding": "Western (Windows 1252)",
+        "default_line_ending": "unix",
+        "tab_size": 2,
+        "ensure_newline_at_eof_on_save": true,
+        "translate_tabs_to_spaces": true,
+        "trim_automatic_white_space": true,
+        "show_encoding": true,
+        "show_line_endings": true,
+        "rulers": [112],
+    },
+}
