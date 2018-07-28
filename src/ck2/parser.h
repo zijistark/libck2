@@ -323,8 +323,10 @@ public:
         _up_root_block = std::make_unique<block>(*this, true, is_save);
     }
 
-    const auto& path()       const noexcept { return _lex.path(); }
-    auto        root_block()       noexcept { return _up_root_block.get(); }
+    auto root_block()       noexcept { return _up_root_block.get(); }
+    auto root_block() const noexcept { return _up_root_block.get(); } // need to const-cast the pointer?
+
+    const auto& path() const noexcept { return _lex.path(); }
 
     auto floc(const Location& loc) const noexcept { return FLoc(path(), loc); }
     auto floc(const object& obj)   const noexcept { return FLoc(path(), obj.loc()); }

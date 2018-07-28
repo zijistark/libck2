@@ -29,37 +29,51 @@ ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const Definitions
         color2id_map.emplace(row.color, row.id);
 
     const auto path = vfs["map" / dm.province_map_path()];
-    const string spath = path.generic_string();
+    const auto spath = path.generic_string();
+    const auto ferr = FLErrorStaticFactory(FLoc(path));
 
-    // unique_file_ptr will automatically destroy/close its FILE* if we throw an exception (or return)
     unique_file_ptr ufp( std::fopen(spath.c_str(), "rb"), std::fclose );
     FILE* f = ufp.get();
 
     if (f == nullptr)
-        throw Error("Failed to open file: {}: {}", strerror(errno), spath);
+        throw ferr("Failed to open file: {}", strerror(errno));
 
     BMPHeader bf_hdr;
 
     if (errno = 0; fread(&bf_hdr, sizeof(bf_hdr), 1, f) < 1)
     {
         if (errno)
-            throw FLError(path, "Failed to read bitmap file header: {}", strerror(errno));
+            throw ferr("Failed to read bitmap file header: {}", strerror(errno));
         else
-            throw FLError(path, "Unexpected EOF while reading bitmap file header (file corruption)");
+            throw ferr("Unexpected EOF while reading bitmap file header (file corruption)");
     }
 
     if (bf_hdr.magic != BMPHeader::MAGIC)
-        throw FLError(path, "Unsupported bitmap file type (magic=0x{:04X} but want magic=0x{:04X})",
-                      bf_hdr.magic, BMPHeader::MAGIC);
+        throw ferr("Unsupported bitmap file type (magic=0x{:04X} but want magic=0x{:04X})",
+                   bf_hdr.magic, BMPHeader::MAGIC);
 
-    // TODO: all these not to be handled by compile-time assertions (every damn one from here one!)
-    assert( bf_hdr.n_header_size >= 40 );
-    assert( bf_hdr.n_width > 0 );
-    assert( bf_hdr.n_height > 0 ); // TODO (though not sure if game supports top-to-bottom scan order)
-    assert( bf_hdr.n_planes == 1 );
-    assert( bf_hdr.n_bpp == 24 );
-    assert( bf_hdr.compression_type == 0 );
-    assert( bf_hdr.n_colors == 0 );
+    if (bf_hdr.n_header_size < 40)
+        throw ferr("Format unsupported: DIB header size is {} bytes but need at least 40", bf_hdr.n_header_size);
+
+    if (bf_hdr.n_width <= 0)
+        throw ferr("Format unsupported: Expected positive image width, found {}", bf_hdr.n_width);
+
+    if (bf_hdr.n_height <= 0)
+        throw ferr("Format unsupported: Expected positive image height, found {}", bf_hdr.n_height);
+
+    if (bf_hdr.n_planes != 1)
+        throw ferr("Format unsupported: Should only be 1 image plane, found {}", bf_hdr.n_planes);
+
+    if (bf_hdr.n_bpp != 24)
+        throw ferr("Format unsupported: Need 24bpp color but found {}", bf_hdr.n_bpp);
+
+    if (bf_hdr.compression_type != 0)
+        throw ferr("Format unsupported: Found unsupported compression type #{}", bf_hdr.compression_type);
+
+    if (bf_hdr.n_colors != 0)
+        throw ferr("Format unsupported: Image shouldn't be paletted, but {} colors were specified",
+                   bf_hdr.n_colors);
+
     assert( bf_hdr.n_important_colors == 0 );
 
     _cols = bf_hdr.n_width;
@@ -67,21 +81,22 @@ ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const Definitions
 
     /* calculate row size with 32-bit alignment padding */
     uint row_sz = 4 * ((bf_hdr.n_bpp * _cols + 31) / 32);
+    const auto bitmap_sz = row_sz * _rows;
 
-    if (bf_hdr.n_bitmap_size)
-        assert( bf_hdr.n_bitmap_size == row_sz * _rows );
+    if (bf_hdr.n_bitmap_size != 0 && bf_hdr.n_bitmap_size != bitmap_sz)
+        throw ferr("File corruption: Raw bitmap data section should be {} bytes but {} were specified",
+                   bitmap_sz, bf_hdr.n_bitmap_size);
 
     /* allocate ID map */
+    // OPTIMIZE: align to a 64-byte cache line boundary (or really over-align and choose a page boundary)
     _map = std::make_unique<id_t[]>(_cols * _rows);
 
     /* seek past any other bytes and directly to offset of pixel array (if needed). */
     if (fseek(f, bf_hdr.n_bitmap_offset, SEEK_SET) != 0)
-        throw FLError(path, "Failed to seek to raw bitmap data (offset=0x{0:08X}/{0}): {1}",
-                      bf_hdr.n_bitmap_offset,
-                      strerror(errno));
+        throw ferr("Failed to seek to raw bitmap data section (file offset: 0x{0:08X} / {0}): {1}",
+                   bf_hdr.n_bitmap_offset, strerror(errno));
 
     /* read bitmap image data (pixel array), row by row, in bottom-to-top raster scan order */
-
     auto up_row_buf = std::make_unique<uint8_t[]>(row_sz);
 
     for (uint row = 0; row < _rows; ++row)
@@ -89,9 +104,9 @@ ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const Definitions
         if (errno = 0; fread(up_row_buf.get(), row_sz, 1, f) < 1)
         {
             if (errno)
-                throw FLError(path, "Failed to read scanline #{} of bitmap data: {}", row, strerror(errno));
+                throw ferr("Failed to read [bottom-to-top] scanline #{} of bitmap data: {}", row, strerror(errno));
             else
-                throw FLError(path, "Unexpected EOF while reading bitmap data");
+                throw ferr("Unexpected EOF while reading bitmap data");
         }
 
         const auto y = _rows - 1 - row;
@@ -118,7 +133,7 @@ ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const Definitions
                 if (auto it = color2id_map.find({ p[2], p[1], p[0] }); it != color2id_map.end())
                     id = it->second;
                 else
-                    throw FLError(path, "Unexpected color RGB(%hhu, %hhu, %hhu) in provinces bitmap at (%u, %u)",
+                    throw ferr("Unexpected color RGB(%hhu, %hhu, %hhu) in provinces bitmap at (%u, %u)",
                                   p[2], p[1], p[0], x, y);
             }
 

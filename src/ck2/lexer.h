@@ -14,10 +14,8 @@ _CK2_NAMESPACE_BEGIN;
 class token;
 
 class lexer {
-    using uniq_file_ptr = std::unique_ptr<std::FILE, int (*)(std::FILE *)>;
-
-    uniq_file_ptr _f;
-    fs::path      _path;
+    unique_file_ptr _f;
+    fs::path        _path;
 
     void reset_scanner() {
         yyin = nullptr;
@@ -30,7 +28,7 @@ public:
     ~lexer() noexcept { reset_scanner(); }
     lexer(const fs::path& path);
 
-    const fs::path& path() const noexcept { return _path; }
+    const auto& path() const noexcept { return _path; }
 
     // read a new token from the input into t. if max_copy_sz is nonzero, actually copy the token text buffer (capped by
     // this amount) into the token object's preexisting buffer. otherwise, when max_copy_sz == 0, simply swap the token
