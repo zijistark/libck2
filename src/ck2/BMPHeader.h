@@ -1,11 +1,11 @@
-#ifndef __LIBCK2_BMP_HEADER_H__
-#define __LIBCK2_BMP_HEADER_H__
+#ifndef LIBCK2_BMP_HEADER_H
+#define LIBCK2_BMP_HEADER_H
 
 #include "common.h"
 #include <cstdio>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 // Apparently GCC 7.3 on MinGW64 is only paying attention to these 'pack' pragmas (which are traditionally the MSVC
@@ -57,5 +57,5 @@ struct BMPHeader
 #pragma pack(pop)
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

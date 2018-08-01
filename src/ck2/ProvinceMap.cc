@@ -14,7 +14,7 @@
 #include "VFS.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const DefinitionsTable& def_tbl)
@@ -119,7 +119,7 @@ ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const Definitions
 
         for (uint x = 0; x < _cols; ++x)
         {
-            const uint8_t* p = &up_row_buf[3*x];
+            uint8_t const* p = &up_row_buf[3*x];
             uint16_t id;
 
             if (p[0] == 0xFF && p[1] == 0xFF && p[2] == 0xFF)
@@ -146,4 +146,4 @@ ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const Definitions
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;

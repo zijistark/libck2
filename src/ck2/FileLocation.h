@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_FILE_LOCATION_H__
-#define __LIBCK2_FILE_LOCATION_H__
+#ifndef LIBCK2_FILE_LOCATION_H
+#define LIBCK2_FILE_LOCATION_H
 
 #include "common.h"
 #include "Error.h"
@@ -7,7 +7,7 @@
 #include "filesystem.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 class FileLocation : public Location {
@@ -78,10 +78,11 @@ private:
 };
 
 
-// when the FileLocation doesn't actually change (typically for when omitting line/col information)
+// when the FileLocation doesn't actually change (typically for when omitting line/col information, such as in
+// binary files)
 struct FLErrorStaticFactory
 {
-    constexpr FLErrorStaticFactory(const FLoc& fl_) : _fl(fl_) {}
+    FLErrorStaticFactory(const FLoc& fl_) : _fl(fl_) {}
 
     template<typename... Args>
     constexpr auto operator()(string_view format, Args&& ...args) const
@@ -90,14 +91,9 @@ struct FLErrorStaticFactory
     }
 
 private:
-    // NOTE: we certainly could've chosen to just hold a copy of the original FLoc, but we're staying consistent
-    // with the FLErrorFactory's semantics (not assignable, etc.), so we hold a const l-value reference.
-    // Additionally, this allows FLErrorStaticFactory to be a constexpr object, because otherwise, holding our own
-    // copy of FLoc would mean that FLErrorStaticFactory would have a non-trivial destructor (specifically due to
-    // the fs::path object inside an FLoc and nothing else).
-    const FLoc& _fl;
+    FLoc _fl;
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

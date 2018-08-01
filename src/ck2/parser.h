@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_PARSER_H__
-#define __LIBCK2_PARSER_H__
+#ifndef LIBCK2_PARSER_H
+#define LIBCK2_PARSER_H
 
 #include "common.h"
 #include "FileLocation.h"
@@ -20,7 +20,7 @@
 #include <vector>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 using std::unique_ptr;
@@ -374,7 +374,7 @@ inline uint title_tier(const char* s) {
 bool looks_like_title(const char*);
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif
 
 inline std::ostream& operator<<(std::ostream& os, const ck2::block& a)     { a.print(os); return os; }

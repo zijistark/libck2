@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_VFS_H__
-#define __LIBCK2_VFS_H__
+#ifndef LIBCK2_VFS_H
+#define LIBCK2_VFS_H
 
 
 #include "common.h"
@@ -8,7 +8,7 @@
 #include <string>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 struct VFS {
@@ -58,5 +58,5 @@ private:
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

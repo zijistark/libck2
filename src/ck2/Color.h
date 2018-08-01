@@ -1,10 +1,10 @@
-#ifndef __LIBCK2_COLOR_H__
-#define __LIBCK2_COLOR_H__
+#ifndef LIBCK2_COLOR_H
+#define LIBCK2_COLOR_H
 
 #include "common.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 //TODO: compare default MSVC code generation for `rgb` vs. packing `rgb` to fit within a 32-bit word
@@ -41,7 +41,7 @@ struct RGB {
 
 //#pragma pack(pop)
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 
 /* inject std::hash<rgb> specialization */
 

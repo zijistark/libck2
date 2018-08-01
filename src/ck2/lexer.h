@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_LEXER_H__
-#define __LIBCK2_LEXER_H__
+#ifndef LIBCK2_LEXER_H
+#define LIBCK2_LEXER_H
 
 #include "common.h"
 #include "scanner.h"
@@ -8,7 +8,7 @@
 #include <cstdio>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 class token;
@@ -37,5 +37,5 @@ public:
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

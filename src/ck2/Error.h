@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_ERROR_H__
-#define __LIBCK2_ERROR_H__
+#ifndef LIBCK2_ERROR_H
+#define LIBCK2_ERROR_H
 
 
 #include "fmt/format.h"
@@ -8,7 +8,7 @@
 #include <stdexcept>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 class Error : public std::runtime_error {
@@ -26,5 +26,5 @@ public:
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

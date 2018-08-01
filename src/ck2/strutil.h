@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_STRUTIL_H__
-#define __LIBCK2_STRUTIL_H__
+#ifndef LIBCK2_STRUTIL_H
+#define LIBCK2_STRUTIL_H
 
 #include <cstring>
 #include <string_view>
@@ -7,7 +7,7 @@
 #include "common.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 namespace strutil {
 
 
@@ -45,5 +45,5 @@ static inline constexpr auto is_blank(string_view s)
 
 
 } // end strutil namespace
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

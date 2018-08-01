@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_FILESYSTEM_H__
-#define __LIBCK2_FILESYSTEM_H__
+#ifndef LIBCK2_FILESYSTEM_H
+#define LIBCK2_FILESYSTEM_H
 
 #include "common.h"
 #include <boost/filesystem.hpp>
@@ -12,7 +12,7 @@
 // after that, it's convenience stuff for users of FS-related things.
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 namespace fs = boost::filesystem;
@@ -41,5 +41,5 @@ struct PathTypeError : public PathError {
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

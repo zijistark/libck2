@@ -12,7 +12,7 @@
 #include "strutil.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 DefinitionsTable::DefinitionsTable()
@@ -141,4 +141,4 @@ void DefinitionsTable::write(const fs::path& path) const {
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;

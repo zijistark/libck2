@@ -3,7 +3,7 @@
 #include "fmt/format.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 void BMPHeader::print(FILE* out) const {
@@ -28,4 +28,4 @@ void BMPHeader::print(FILE* out) const {
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;

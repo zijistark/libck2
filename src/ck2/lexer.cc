@@ -3,7 +3,7 @@
 #include "lexer.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 bool lexer::read_token_into(token& t, size_t max_copy_sz)
@@ -60,4 +60,4 @@ lexer::lexer(const fs::path& path)
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;

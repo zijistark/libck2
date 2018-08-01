@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_FP_DECIMAL_H__
-#define __LIBCK2_FP_DECIMAL_H__
+#ifndef LIBCK2_FP_DECIMAL_H
+#define LIBCK2_FP_DECIMAL_H
 
 /* ck2::fp_decimal -- a class to represent parsed fixed-point decimal numbers accurately (i.e., fractional base-10^-N
  * component so that any parsed decimal number can be represented exactly).
@@ -20,7 +20,7 @@
 #include <ostream>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 /* exp10<N> -- static computation of the Nth power of 10 */
@@ -167,5 +167,5 @@ fp_decimal<D>::fp_decimal(char* src) {
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

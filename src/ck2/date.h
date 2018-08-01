@@ -1,10 +1,10 @@
-#ifndef __LIBCK2_DATE_H__
-#define __LIBCK2_DATE_H__
+#ifndef LIBCK2_DATE_H
+#define LIBCK2_DATE_H
 
 #include "common.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 #ifdef _MSC_VER
@@ -54,5 +54,5 @@ public:
 #endif
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

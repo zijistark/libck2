@@ -1,12 +1,12 @@
-#ifndef __LIBCK2_PROVINCE_MAP_H__
-#define __LIBCK2_PROVINCE_MAP_H__
+#ifndef LIBCK2_PROVINCE_MAP_H
+#define LIBCK2_PROVINCE_MAP_H
 
 #include "common.h"
 #include "filesystem.h"
 #include <limits>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 class DefinitionsTable;
@@ -39,6 +39,9 @@ struct ProvinceMap
     id_t&       operator()(uint x, uint y)       noexcept { return _map[ y * _cols + x ]; }
     id_t const& operator()(uint x, uint y) const noexcept { return _map[ y * _cols + x ]; }
 
+    auto        map()       noexcept { return _map.get(); }
+    const auto* map() const noexcept { return _map.get(); }
+
 private:
     unique_ptr<id_t[]> _map;
     uint _cols;
@@ -46,5 +49,5 @@ private:
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

@@ -6,7 +6,7 @@
 #include <ctype.h>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 struct binary_op_text {
@@ -287,4 +287,4 @@ bool looks_like_title(const char* s) {
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;

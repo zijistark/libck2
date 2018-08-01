@@ -1,11 +1,10 @@
-// -*- c++ -*-
-
-#pragma once
+#ifndef LIBCK2_CSTR_H
+#define LIBCK2_CSTR_H
 
 #include "common.h"
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 /* CSTR -- light wrapper class for a pointer to a zero-terminated, C-style string.
@@ -34,7 +33,7 @@ public:
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 
 
 /* inject std::hash<ck2::cstr> specialization */
@@ -61,3 +60,5 @@ namespace std {
         }
     };
 }
+
+#endif

@@ -9,7 +9,7 @@
 #include <cerrno>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 static uint col_to_province_id(
@@ -133,4 +133,4 @@ void AdjacenciesFile::write(const fs::path& out_path)
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;

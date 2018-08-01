@@ -1,9 +1,9 @@
-#ifndef __LIBCK2_COMMON_H__
-#define __LIBCK2_COMMON_H__
+#ifndef LIBCK2_COMMON_H
+#define LIBCK2_COMMON_H
 
 
-#define _CK2_NAMESPACE_BEGIN namespace ck2 {
-#define _CK2_NAMESPACE_END }
+#define NAMESPACE_CK2 namespace ck2 {
+#define END_NAMESPACE_CK2 }
 
 
 #include <iosfwd>
@@ -23,7 +23,7 @@ namespace std {
 };
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 using std::string_view;
@@ -94,5 +94,5 @@ static inline size_t mdh_strncpy(char* dst, size_t dst_sz, const char* const src
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

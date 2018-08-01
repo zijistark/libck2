@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_DEFINITIONS_TABLE_H__
-#define __LIBCK2_DEFINITIONS_TABLE_H__
+#ifndef LIBCK2_DEFINITIONS_TABLE_H
+#define LIBCK2_DEFINITIONS_TABLE_H
 
 #include "common.h"
 #include "Color.h"
@@ -8,7 +8,7 @@
 #include <vector>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 class DefaultMap;
@@ -57,5 +57,5 @@ private:
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

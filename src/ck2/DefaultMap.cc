@@ -7,7 +7,7 @@
 #include <string_view>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 DefaultMap::DefaultMap(const VFS& vfs)
@@ -142,4 +142,4 @@ bool DefaultMap::is_water_province(uint prov_id) const noexcept {
 }
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;

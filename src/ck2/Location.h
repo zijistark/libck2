@@ -1,12 +1,12 @@
-#ifndef __LIBCK2_LOCATION_H__
-#define __LIBCK2_LOCATION_H__
+#ifndef LIBCK2_LOCATION_H
+#define LIBCK2_LOCATION_H
 
 #include "common.h"
 #include "fmt/format.h"
 #include <string>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 class Location {
@@ -52,5 +52,5 @@ private:
 using Loc = Location;
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif

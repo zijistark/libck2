@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_CK2_H__
-#define __LIBCK2_CK2_H__
+#ifndef LIBCK2_CK2_H
+#define LIBCK2_CK2_H
 
 
 // not all these should be here, but keeps my compiles touching the right files right now:
@@ -13,4 +13,4 @@
 #include "ck2/parser.h"
 
 
-#endif // __LIBCK2_CK2_H__
+#endif

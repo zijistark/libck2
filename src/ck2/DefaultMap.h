@@ -1,5 +1,5 @@
-#ifndef __LIBCK2_DEFAULT_MAP_H__
-#define __LIBCK2_DEFAULT_MAP_H__
+#ifndef LIBCK2_DEFAULT_MAP_H
+#define LIBCK2_DEFAULT_MAP_H
 
 #include "common.h"
 #include "VFS.h"
@@ -11,7 +11,7 @@
 #include <unordered_set>
 
 
-_CK2_NAMESPACE_BEGIN;
+NAMESPACE_CK2;
 
 
 class DefaultMap {
@@ -80,5 +80,5 @@ public:
 };
 
 
-_CK2_NAMESPACE_END;
+END_NAMESPACE_CK2;
 #endif
