@@ -11,11 +11,12 @@
 #include <cstdint>
 
 // TODO: remove these from this common header soon:
-#include <cassert>
+#include <cassert> // we might want to keep this in common.h, however
 #include <cstring>
-#include "Error.h"
+#include "Error.h" // especially remove this one soon
 
 
+// STYLE-TODO: don't 'using' templates/aliases/typedefs from the std:: namespace inside a library's namespace
 // std forward-decls for convenience/consistency inside CK2 namespace
 
 namespace std {
@@ -26,6 +27,7 @@ namespace std {
 NAMESPACE_CK2;
 
 
+// STYLE-TODO: don't 'using' templates/aliases/typedefs from the std:: namespace inside a library's namespace
 using std::string_view;
 using std::string;
 using std::numeric_limits;
@@ -38,6 +40,8 @@ typedef unsigned int uint;
 inline constexpr char const* EOL = "\n";
 inline constexpr char const* TAB = "\t";
 
+
+// TODO: move this to the only place it's currently used, by fp_decimal:
 
 /* generate_int_array< N, template<size_t> F >::result
  * - N is the number of elements in the array result::data
@@ -70,6 +74,7 @@ struct generate_int_array {
 };
 
 
+// TODO: move this to ck2::strutil::
 // mdh_strncpy
 
 // copy not more than `length` characters from the string `src` (including any NULL terminator) to the string `dst`

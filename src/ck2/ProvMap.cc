@@ -1,4 +1,4 @@
-#include "ProvinceMap.h"
+#include "ProvMap.h"
 
 #include <cerrno>
 #include <cstdio>
@@ -17,7 +17,7 @@
 NAMESPACE_CK2;
 
 
-ProvinceMap::ProvinceMap(const VFS& vfs, const DefaultMap& dm, const DefinitionsTable& def_tbl)
+ProvMap::ProvMap(const VFS& vfs, const DefaultMap& dm, const DefinitionsTable& def_tbl)
 : _map(nullptr),
   _cols(0),
   _rows(0)

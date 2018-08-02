@@ -14,7 +14,7 @@ class DefaultMap;
 class VFS;
 
 
-// A ProvinceMap class opens & processes the raw bitmap from 'provinces.bmp' & allocates it into a buffer(s) of
+// A ProvMap class opens & processes the raw bitmap from 'provinces.bmp' & allocates it into a buffer(s) of
 // 16-bit province IDs. It then provides read-only access to that mapping of IDs to raster (x, y) grid coordinates.
 // Some province IDs at the very top of the ID range are reserved for useful classifications.
 
@@ -23,11 +23,11 @@ class VFS;
 // operator[].]
 //
 // there will probably be a faster, layout-aware means of traversing the grid later.
-struct ProvinceMap
+struct ProvMap
 {
     using id_t = uint16_t;
 
-    ProvinceMap(const VFS&, const DefaultMap&, const DefinitionsTable&);
+    ProvMap(const VFS&, const DefaultMap&, const DefinitionsTable&);
 
     static constexpr id_t PM_IMPASSABLE  = 0; // zero isn't a valid province ID, so reuse it
     static constexpr id_t PM_OCEAN       = std::numeric_limits<id_t>::max();
