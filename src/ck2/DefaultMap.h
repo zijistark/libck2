@@ -72,11 +72,8 @@ public:
     const auto& seazone_ranges()     const noexcept { return _seazone_vec; }
     const auto& major_river_set()    const noexcept { return _major_river_set; }
 
-    bool is_valid_province(uint prov_id) const noexcept {
-        return prov_id > 0 && prov_id <= _max_prov_id;
-    }
-
-    bool is_water_province(uint prov_id) const noexcept;
+    bool is_valid_province(prov_id_t id) const noexcept { return id > 0 && id <= _max_prov_id; }
+    bool is_water_province(prov_id_t)    const noexcept;
 };
 
 

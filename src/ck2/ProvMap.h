@@ -26,25 +26,28 @@ class VFS;
 // there will probably be a faster, layout-aware means of traversing the grid later.
 struct ProvMap
 {
-    using id_t = uint16_t;
-
     ProvMap(const VFS&, const DefaultMap&, const DefinitionsTable&);
 
-    static constexpr id_t PM_IMPASSABLE  = 0; // zero isn't a valid province ID, so reuse it
-    static constexpr id_t PM_OCEAN       = std::numeric_limits<id_t>::max();
-    static constexpr id_t PM_REAL_ID_CAP = std::numeric_limits<id_t>::max() - 1;
+    // We always maintain 0 as the 'null province.' For ProvMap, this actually doesn't matter for now, so this is
+    // practically documentation.
+    static constexpr prov_id_t PM_NULL = 0;
+
+    // But these definitely matter right now for ProvMap:
+    static constexpr prov_id_t PM_IMPASSABLE  = std::numeric_limits<prov_id_t>::max();
+    static constexpr prov_id_t PM_OCEAN       = std::numeric_limits<prov_id_t>::max() - 1;
+    static constexpr prov_id_t PM_REAL_ID_MAX = std::numeric_limits<prov_id_t>::max() - 2;
 
     auto width()  const noexcept { return _cols; }
     auto height() const noexcept { return _rows; }
 
-    id_t&       operator()(uint x, uint y)       noexcept { return _map[ y * _cols + x ]; }
-    id_t const& operator()(uint x, uint y) const noexcept { return _map[ y * _cols + x ]; }
+    auto& operator()(uint x, uint y)       noexcept { return _map[ y * _cols + x ]; }
+    auto& operator()(uint x, uint y) const noexcept { return _map[ y * _cols + x ]; }
 
-    auto        map()       noexcept { return _map.get(); }
-    const auto* map() const noexcept { return _map.get(); }
+    auto data()       noexcept { return _map.get(); }
+    auto data() const noexcept { return _map.get(); }
 
 private:
-    unique_ptr<id_t[]> _map;
+    unique_ptr<prov_id_t[]> _map;
     uint _cols;
     uint _rows;
 };

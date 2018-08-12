@@ -36,6 +36,8 @@ using std::unique_ptr;
 using unique_file_ptr = std::unique_ptr< std::FILE, int (*)(std::FILE*) >;
 
 typedef unsigned int uint;
+using prov_id_t = uint16_t;
+using char_id_t = int32_t;
 
 inline constexpr char const* EOL = "\n";
 inline constexpr char const* TAB = "\t";

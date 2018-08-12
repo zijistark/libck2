@@ -130,7 +130,7 @@ DefaultMap::DefaultMap(const VFS& vfs)
 }
 
 
-bool DefaultMap::is_water_province(uint prov_id) const noexcept {
+bool DefaultMap::is_water_province(prov_id_t prov_id) const noexcept {
     // TODO: upgrade this to a binary search when we add a sorted version of the seazone vector for a) validation
     // that the sea_zones ranges all do not overlap, and b) so that an efficient province ID membership query for
     // an ocean_region can be implemented

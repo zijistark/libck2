@@ -23,7 +23,7 @@ ProvMap::ProvMap(const VFS& vfs, const DefaultMap& dm, const DefinitionsTable& d
   _rows(0)
 {
     /* map provinces.bmp color to province ID */
-    std::unordered_map<RGB, id_t> color2id_map;
+    std::unordered_map<RGB, prov_id_t> color2id_map;
 
     for (const auto& row : def_tbl)
         color2id_map.emplace(row.color, row.id);
@@ -89,7 +89,7 @@ ProvMap::ProvMap(const VFS& vfs, const DefaultMap& dm, const DefinitionsTable& d
 
     /* allocate ID map */
     // OPTIMIZE: align to a 64-byte cache line boundary (or really over-align and choose a page boundary)
-    _map = std::make_unique<id_t[]>(_cols * _rows);
+    _map = std::make_unique<prov_id_t[]>(_cols * _rows);
 
     /* seek past any other bytes and directly to offset of pixel array (if needed). */
     if (fseek(f, bf_hdr.n_bitmap_offset, SEEK_SET) != 0)
