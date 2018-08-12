@@ -133,7 +133,7 @@ ProvMap::ProvMap(const VFS& vfs, const DefaultMap& dm, const DefinitionsTable& d
                 if (auto it = color2id_map.find({ p[2], p[1], p[0] }); it != color2id_map.end())
                     id = it->second;
                 else
-                    throw ferr("Unexpected color RGB(%hhu, %hhu, %hhu) in provinces bitmap at (%u, %u)",
+                    throw ferr("Unexpected color RGB({}, {}, {}) in provinces bitmap at pixel ({}, {})",
                                   p[2], p[1], p[0], x, y);
             }
 
