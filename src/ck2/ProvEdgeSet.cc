@@ -97,8 +97,15 @@ ProvEdgeSet::ProvEdgeSet(const ProvMap& pm)
   uint wr_idx = 0;
 
   for (uint rd_idx = 0; rd_idx < _M_edges.size(); ++rd_idx)
-    if (_M_edges[rd_idx] && rd_idx != wr_idx)
-      _M_edges[wr_idx++] = std::move(_M_edges[rd_idx]);
+  {
+    if (_M_edges[rd_idx])
+    {
+      if (rd_idx != wr_idx)
+        _M_edges[wr_idx] = std::move(_M_edges[rd_idx]);
+
+      ++wr_idx;
+    }
+  }
 
   assert(wr_idx > 0);
   _M_edges.resize(wr_idx);
