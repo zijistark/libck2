@@ -33,7 +33,7 @@ public:
 };
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 
 
 /* inject std::hash<ck2::cstr> specialization */

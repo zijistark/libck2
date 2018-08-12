@@ -3,7 +3,7 @@
 
 
 #define NAMESPACE_CK2 namespace ck2 {
-#define END_NAMESPACE_CK2 }
+#define NAMESPACE_CK2_END }
 
 
 #include <iosfwd>
@@ -99,5 +99,5 @@ static inline size_t mdh_strncpy(char* dst, size_t dst_sz, const char* const src
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 #endif

@@ -287,4 +287,4 @@ bool looks_like_title(const char* s) {
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;

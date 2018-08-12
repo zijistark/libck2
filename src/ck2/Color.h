@@ -20,7 +20,7 @@ struct RGB {
         r(static_cast<uint8_t>(red)),
         g(static_cast<uint8_t>(green)),
         b(static_cast<uint8_t>(blue)) {}
- 
+
     constexpr RGB(uint rgb) :
         r(static_cast<uint8_t>( (rgb >> 16) & 0xFF )),
         g(static_cast<uint8_t>( (rgb >> 8) & 0xFF )),
@@ -33,7 +33,7 @@ struct RGB {
     constexpr auto red()   const noexcept { return r; }
     constexpr auto green() const noexcept { return g; }
     constexpr auto blue()  const noexcept { return b; }
-    
+
     constexpr bool operator==(const RGB& c) const noexcept {
         return (r == c.r && g == c.g && b == c.b);
     }
@@ -41,7 +41,7 @@ struct RGB {
 
 //#pragma pack(pop)
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 
 /* inject std::hash<rgb> specialization */
 

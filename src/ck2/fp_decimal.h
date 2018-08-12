@@ -167,5 +167,5 @@ fp_decimal<D>::fp_decimal(char* src) {
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 #endif

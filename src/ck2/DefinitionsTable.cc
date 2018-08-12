@@ -34,7 +34,7 @@ DefinitionsTable::DefinitionsTable(const VFS& vfs, const DefaultMap& dm)
 
     unique_file_ptr ufp( std::fopen(spath.c_str(), "rb"), std::fclose );
     FILE* f = ufp.get();
-    
+
     if (f == nullptr)
         throw Error("Failed to open file: {}: {}", strerror(errno), spath);
 
@@ -141,4 +141,4 @@ void DefinitionsTable::write(const fs::path& path) const {
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;

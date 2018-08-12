@@ -142,4 +142,4 @@ bool DefaultMap::is_water_province(uint prov_id) const noexcept {
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;

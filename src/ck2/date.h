@@ -54,5 +54,5 @@ public:
 #endif
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 #endif

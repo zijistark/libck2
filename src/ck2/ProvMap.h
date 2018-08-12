@@ -1,9 +1,10 @@
 #ifndef LIBCK2_PROVINCE_MAP_H
 #define LIBCK2_PROVINCE_MAP_H
 
+#include <limits>
+
 #include "common.h"
 #include "filesystem.h"
-#include <limits>
 
 
 NAMESPACE_CK2;
@@ -49,5 +50,5 @@ private:
 };
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 #endif

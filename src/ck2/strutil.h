@@ -21,7 +21,7 @@ namespace strutil {
 static inline auto strsep(char** sptr, int delim)
 {
     auto start = *sptr;
-    
+
     if (auto p = (start) ? strchr(start, delim) : nullptr) {
         *p = '\0';
         *sptr = p + 1;
@@ -45,5 +45,5 @@ static inline constexpr auto is_blank(string_view s)
 
 
 } // end strutil namespace
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 #endif

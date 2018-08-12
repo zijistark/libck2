@@ -28,4 +28,4 @@ void BMPHeader::print(FILE* out) const {
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;

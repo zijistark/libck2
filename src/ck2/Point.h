@@ -119,7 +119,7 @@ struct Point2D {
 using Point = Point2D;
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 
 
 namespace std {

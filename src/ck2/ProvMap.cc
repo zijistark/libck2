@@ -146,4 +146,4 @@ ProvMap::ProvMap(const VFS& vfs, const DefaultMap& dm, const DefinitionsTable& d
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;

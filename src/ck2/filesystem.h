@@ -41,5 +41,5 @@ struct PathTypeError : public PathError {
 };
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 #endif

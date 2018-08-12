@@ -60,4 +60,4 @@ lexer::lexer(const fs::path& path)
 }
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;

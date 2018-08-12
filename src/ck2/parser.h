@@ -374,7 +374,7 @@ inline uint title_tier(const char* s) {
 bool looks_like_title(const char*);
 
 
-END_NAMESPACE_CK2;
+NAMESPACE_CK2_END;
 #endif
 
 inline std::ostream& operator<<(std::ostream& os, const ck2::block& a)     { a.print(os); return os; }
