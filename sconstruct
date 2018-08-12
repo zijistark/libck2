@@ -13,7 +13,7 @@ env.Append(CCFLAGS='-Wall -Wno-unused-function -Werror')
 env.Append(CXXFLAGS='-std=c++17')
 
 if env['BUILD_TYPE'] == 'debug_max':
-    env.Append(CPPDEFINES=['DEBUG_MAX'])
+    env.Append(CPPDEFINES=['DEBUG', 'DEBUG_MAX'])
     env.Append(CXXFLAGS='-ggdb -O0')
 elif env['BUILD_TYPE'] == 'debug':
     env.Append(CPPDEFINES=['DEBUG'])
