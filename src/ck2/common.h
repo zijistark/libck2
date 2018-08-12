@@ -17,8 +17,8 @@
 
 
 // STYLE-TODO: don't 'using' templates/aliases/typedefs from the std:: namespace inside a library's namespace
-// std forward-decls for convenience/consistency inside CK2 namespace
-
+// (in this case, we're forward-declaring a template signature *outside* the namespace so that we can later
+// `using` it *inside* the namespace, but it's all the same principle).
 namespace std {
     template<class T, class Deleter> class unique_ptr;
 };
@@ -30,20 +30,28 @@ NAMESPACE_CK2;
 // STYLE-TODO: don't 'using' templates/aliases/typedefs from the std:: namespace inside a library's namespace
 using std::string_view;
 using std::string;
-using std::numeric_limits;
 using std::ostream;
 using std::unique_ptr;
 using unique_file_ptr = std::unique_ptr< std::FILE, int (*)(std::FILE*) >;
+
+/* a user-defined literal suffix for unsigned short, aka a "half word" */
+// inline constexpr std::uint16_t operator "" _h(unsigned long long value) noexcept
+// {
+//   return static_cast<std::uint16_t>(value);
+// }
 
 typedef unsigned int uint;
 using prov_id_t = uint16_t;
 using char_id_t = int32_t;
 
+// eh, remove these from common.h too (they are actually rather context-sensitive — would be better to limit such
+// definitions to their context):
 inline constexpr char const* EOL = "\n";
 inline constexpr char const* TAB = "\t";
 
 
-// TODO: move this to the only place it's currently used, by fp_decimal:
+// TODO: move this (generate_int_array for generating arrays of compile-time constant integers — for which there
+// are now some cleaner methods in C++17, BTW) to the only place it's currently used, by fp_decimal:
 
 /* generate_int_array< N, template<size_t> F >::result
  * - N is the number of elements in the array result::data
