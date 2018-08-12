@@ -53,7 +53,7 @@ public:
 
 private:
     std::vector<Row> _v;
-    static inline const auto DUMMY_ROW = Row{ 0, 0, "" };
+    static inline const auto DUMMY_ROW = Row{ 0, 0, "", "" };
 };
 
 
