@@ -6,14 +6,14 @@
 #define NAMESPACE_CK2_END }
 
 
+#include <cstdint>
+#include <cassert>
 #include <iosfwd>
 #include <limits>
-#include <cstdint>
 
 // TODO: remove these from this common header soon:
-#include <cassert> // we might want to keep this in common.h, however
 #include <cstring>
-#include "Error.h" // especially remove this one soon
+#include "Error.h"
 
 
 /* a user-defined literal suffix for unsigned short, aka a "half word" */

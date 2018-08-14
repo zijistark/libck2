@@ -14,7 +14,7 @@ NAMESPACE_CK2;
 struct VFS {
     VFS(const fs::path& base_path) : _root_paths({ base_path }) {}
 
-    void push_root_path(const fs::path& p) {
+    void push_mod_path(const fs::path& p) {
         if (!fs::exists(p)) throw PathNotFoundError(p);
         if (!fs::is_directory(p)) throw PathTypeError(p);
         _root_paths.push_back(p);
@@ -43,11 +43,12 @@ struct VFS {
 
         // iterate from "bottom" (top of stack) to "top" (bottom of stack) of our vector
         for (auto it = _root_paths.crbegin(); it != _root_paths.crend(); ++it) {
-            s += "\n\t";
-            s += (*it).string();
+            s.append("\n\t");
+            s.append((*it).string());
         }
 
-        return s += "\n}";
+        s.append("\n}");
+        return s;
     }
 
 private:
