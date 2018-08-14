@@ -21,10 +21,10 @@ public:
     struct Row {
         uint        id;
         RGB         color;
-        string name;
-        string rest;
+        std::string name;
+        std::string rest;
 
-        Row(uint id_, RGB color_, string_view name_, string_view rest_ = "")
+        Row(uint id_, RGB color_, std::string_view name_, std::string_view rest_ = "")
             : id(id_), color(color_), name(name_), rest(rest_) {}
     };
 

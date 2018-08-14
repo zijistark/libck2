@@ -8,9 +8,9 @@
 NAMESPACE_CK2;
 
 
-/* construct a `date` from a well-formed date-string non-const `src` (we assume the str is thrown away, as we modify it)
- * intended to be used when `src` is already known to be well-formed due to lexical analysis, as we skip error-checking.
- */
+// construct a `date` from a well-formed date-string non-const `src` (we assume the str is thrown away, as we
+// modify it) intended to be used when `src` is already known to be well-formed due to lexical analysis, as we
+// skip error-checking.
 date::date(char* src) {
     char* part[3];
     part[0] = src;
@@ -21,10 +21,9 @@ date::date(char* src) {
         *end = '\0';
     }
 
-    /* part[] now contains 3 null-terminated strings for the year, month, and day.
-     * make sure our object will be able to hold the parsed values.
-     * be permissive of all other problems w/ date components so that we can later report what was actually parsed.
-     */
+    // part[] now contains 3 null-terminated strings for the year, month, and day. make sure our object will be
+    // able to hold the parsed values. be permissive of all other problems w/ date components so that we can
+    // later report what was actually parsed.
 
     // const char* name[3] = { "year", "month", "day" };
     // const int   min[3]  = { INT16_MIN, INT8_MIN, INT8_MIN };

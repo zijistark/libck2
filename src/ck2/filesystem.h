@@ -1,9 +1,12 @@
 #ifndef LIBCK2_FILESYSTEM_H
 #define LIBCK2_FILESYSTEM_H
 
+#include <cstdio>
+#include <memory>
+#include <string>
+
 #include "common.h"
 #include <boost/filesystem.hpp>
-#include <string>
 
 
 // this header exists foremost as a compilation proxy between the different not-quite-there-yet C++17
@@ -16,10 +19,11 @@ NAMESPACE_CK2;
 
 
 namespace fs = boost::filesystem;
+using unique_file_ptr = std::unique_ptr< std::FILE, int (*)(std::FILE*) >;
 
 
 struct PathError : public Error {
-    PathError(const string& msg_, const fs::path& path_) : Error(msg_), _path(path_) {}
+    PathError(const std::string& msg_, const fs::path& path_) : Error(msg_), _path(path_) {}
     auto&       path()       noexcept { return _path; }
     const auto& path() const noexcept { return _path; }
 

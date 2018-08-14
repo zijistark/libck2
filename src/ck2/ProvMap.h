@@ -47,7 +47,7 @@ struct ProvMap
     auto data() const noexcept { return _map.get(); }
 
 private:
-    unique_ptr<prov_id_t[]> _map;
+    std::unique_ptr<prov_id_t[]> _map;
     uint _cols;
     uint _rows;
 };

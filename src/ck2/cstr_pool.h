@@ -9,19 +9,19 @@
 #include <forward_list>
 #include <memory>
 
-/* cstr_pool -- An efficient data structure for allocating memory for C-string style[1] sequences when sequences are
- * typically small but varied in size, and bulk, exception-safe (de)allocation is desirable.
- *
- * [1] With different CharT, this could be used for any such memory sequence that is terminated with a NUL (or
- * sizeof(CharT) zeroes, to be precise).
- *
- * Automatically manages optimal memory alignment of the allocated sequences, but alignment can be forced via the
- * _ALIGNMENT template parameter. E.g., default alignment for x86_64-cygwin-gcc of a byte sequence in RAM is
- * on address boundaries that are modulo 8 bytes (i.e., many memory computations on these strings will be much
- * faster if they start upon a 64-bit alignment boundary in RAM, but it may be desirable for compactness to reduce
- * this alignment to as low as 8-bit, since most unoptimized string algorithms already operate upon byte-by-byte
- * access patterns).
- */
+// cstr_pool -- An efficient data structure for allocating memory for C-string style[1] sequences when sequences
+// are typically small but varied in size, and bulk, exception-safe (de)allocation is desirable.
+
+// [1] With different CharT, this could be used for any such memory sequence that is terminated with a NUL (or
+// sizeof(CharT) zeroes, to be precise).
+
+// Automatically manages optimal memory alignment of the allocated sequences, but alignment can be forced via
+// the _ALIGNMENT template parameter. E.g., default alignment for x86_64-cygwin-gcc of a byte sequence in RAM is
+// on address boundaries that are modulo 8 bytes (i.e., many memory computations on these strings will be much
+// faster if they start upon a 64-bit alignment boundary in RAM, but it may be desirable for compactness to
+// reduce this alignment to as low as 8-bit, since most unoptimized string algorithms already operate upon byte-
+// by-byte access patterns).
+
 
 typedef unsigned char byte_t;
 

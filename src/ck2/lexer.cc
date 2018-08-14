@@ -1,6 +1,8 @@
-#include "Location.h"
-#include "token.h"
 #include "lexer.h"
+
+#include "Location.h"
+#include "strutil.h"
+#include "token.h"
 
 
 NAMESPACE_CK2;
@@ -42,7 +44,7 @@ bool lexer::read_token_into(token& t, size_t max_copy_sz)
     if (max_copy_sz == 0)
         t.text(p_txt, len);
     else
-        t.text_len(static_cast<uint>( mdh_strncpy(t.text(), max_copy_sz, p_txt, len + 1) ));
+        t.text_len(static_cast<uint>( strutil::mdh_strncpy(t.text(), max_copy_sz, p_txt, len + 1) ));
 
     return ret;
 }

@@ -122,7 +122,7 @@ void ProvEdgeSet::finish_segment(Direction d, coord_t fixed_coord, const Segment
   ++_M_paraxial_seg_count;
 #endif
 
-  // Push a new ProvEdge object on to our vector of unique_ptr to ProvEdge. Convert Segment to 2 [end]Points.
+  // Push a new ProvEdge object on to our vector of std::unique_ptr to ProvEdge. Convert Segment to 2 [end]Points.
 
   const auto& edge = _M_edges.emplace_back(
     std::make_unique<ProvEdge>(
@@ -228,7 +228,7 @@ void ProvEdgeSet::trace_edge_end(EdgeEnd which_end, uint edge_idx, EndpointMap& 
     new_endpoint_it->second = edge_idx; // now the entry points at the edge which ate other_edge instead.
 
     // We're 100% done with `other_edge` now, so release it (i.e., destroy & free it while nulling its
-    // owning unique_ptr).
+    // owning std::unique_ptr).
     _M_edges[other_edge_idx].reset(nullptr);
   }
 }

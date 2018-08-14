@@ -21,10 +21,10 @@ public:
         uint from;
         uint to;
         uint through;
-        string type;
-        string comment;
+        std::string type;
+        std::string comment;
 
-        Adjacency(uint _from, uint _to, uint _through, string_view _type, string_view _comment)
+        Adjacency(uint _from, uint _to, uint _through, std::string_view _type, std::string_view _comment)
             : from(_from), to(_to), through(_through), type(_type), comment(_comment) {}
     };
 

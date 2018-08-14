@@ -15,7 +15,7 @@ NAMESPACE_CK2;
 static uint col_to_province_id(
     const FLoc& fl,
     const char* col,
-    const string_view& col_name,
+    const std::string_view& col_name,
     const DefaultMap& dm)
 {
     /* allow a special case where the column is completely unspecified to resolve to the invalid
@@ -87,7 +87,7 @@ AdjacenciesFile::AdjacenciesFile(const VFS& vfs, const DefaultMap& dm)
         }
 
         /* trim potential EOL from final column */
-        string_view rest( cols[NUM_COLS - 1] );
+        std::string_view rest( cols[NUM_COLS - 1] );
         if (!rest.empty() && rest.back() == '\n') rest.remove_suffix(1);
         if (!rest.empty() && rest.back() == '\r') rest.remove_suffix(1);
 
@@ -108,7 +108,7 @@ void AdjacenciesFile::write(const fs::path& out_path)
     // TODO: needs a unique_file_ptr-like thing (exception guard to close/release the file should we return
     // unexpectedly)
 
-    const string spath = out_path.generic_string();
+    const std::string spath = out_path.generic_string();
     std::ofstream os(spath);
 
     // don't think errno is set for ofstream failure, and the C++ exception model for iostreams is fucking uber-
@@ -128,7 +128,7 @@ void AdjacenciesFile::write(const fs::path& out_path)
         if (adj.to) os << adj.to; // treat 0-value as blank
         os << ';' << adj.type << ';';
         if (adj.through) os << adj.through; // treat 0-value as blank
-        os << ";-1;-1;-1;-1;" << adj.comment << EOL;
+        os << ";-1;-1;-1;-1;" << adj.comment << '\n';
     }
 }
 

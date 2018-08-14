@@ -46,7 +46,7 @@ namespace std {
         static_assert(sizeof(size_t) == 8,
                       "ck2::cstr's hash implementation requires 64-bit target to function correctly");
 
-        /* FNV/1a algorithm applied to null-terminated string with unknown length, 64-bit */
+        /* FNV/1a algorithm applied to null-terminated C-string with unknown length, 64-bit */
         size_t operator()(const ck2::cstr& cs) const noexcept {
             size_t hash = 0xCBF29CE484222325;
             auto ptr = cs.data();

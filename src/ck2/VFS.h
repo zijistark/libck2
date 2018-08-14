@@ -36,21 +36,18 @@ struct VFS {
     }
 
     auto to_string() {
-        string s = "{";
+        std::string s = "{";
 
         if (_root_paths.empty())
             return s += '}';
 
         // iterate from "bottom" (top of stack) to "top" (bottom of stack) of our vector
         for (auto it = _root_paths.crbegin(); it != _root_paths.crend(); ++it) {
-            s += EOL;
-            s += TAB;
+            s += "\n\t";
             s += (*it).string();
         }
 
-        s += EOL;
-        s += '}';
-        return s;
+        return s += "\n}";
     }
 
 private:

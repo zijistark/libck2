@@ -139,8 +139,8 @@ object& object::operator=(object&& other) {
         case DATE:      _data.d = other._data.d; break;
         case DECIMAL:   _data.f = other._data.f; break;
         case BINARY_OP: _data.o = other._data.o; break;
-        case BLOCK:     new (&_data.up_block) unique_ptr<block>(std::move(other._data.up_block)); break;
-        case LIST:      new (&_data.up_list)  unique_ptr<list>(std::move(other._data.up_list));   break;
+        case BLOCK:     new (&_data.up_block) std::unique_ptr<block>(std::move(other._data.up_block)); break;
+        case LIST:      new (&_data.up_list)  std::unique_ptr<list>(std::move(other._data.up_list));   break;
     }
 
     _loc = other._loc;
@@ -214,13 +214,13 @@ bool parser::next(token* p_tok, bool eof_ok) {
 }
 
 
-void block::print(ostream& os, uint indent) const {
+void block::print(std::ostream& os, uint indent) const {
     for (auto&& stmt : _vec)
         stmt.print(os, indent);
 }
 
 
-void list::print(ostream& os, uint indent) const {
+void list::print(std::ostream& os, uint indent) const {
     for (auto&& obj : _vec) {
         obj.print(os, indent);
         os << ' ';
@@ -228,7 +228,7 @@ void list::print(ostream& os, uint indent) const {
 }
 
 
-void statement::print(ostream& os, uint indent) const {
+void statement::print(std::ostream& os, uint indent) const {
     os << std::setfill(' ') << std::setw(indent) << "";
     _k.print(os, indent);
     os << " = ";
@@ -237,7 +237,7 @@ void statement::print(ostream& os, uint indent) const {
 }
 
 
-void object::print(ostream& os, uint indent) const {
+void object::print(std::ostream& os, uint indent) const {
 
     if (_type == STRING) {
         if (strpbrk(as_string(), " \t\r\n\'"))

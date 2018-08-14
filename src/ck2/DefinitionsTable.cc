@@ -27,7 +27,7 @@ DefinitionsTable::DefinitionsTable(const VFS& vfs, const DefaultMap& dm)
     auto path = vfs["map" / dm.definitions_path()];
     auto spath = path.generic_string();
 
-    // TODO: all of this I/O and string splitting and type conversion/validation needs to be done in the future by
+    // TODO: all of this I/O and std::string splitting and type conversion/validation needs to be done in the future by
     // a generic CSVReader template class parameterized on the sequence of types (from left to right) for which to
     // extract valid values (presumably simply reusing the [variadic] tuple utility class & a callback function
     // provided by the user code to process a record)
@@ -69,7 +69,7 @@ DefinitionsTable::DefinitionsTable(const VFS& vfs, const DefaultMap& dm)
                 throw flerr("Not enough columns in CSV record (need at least {} but only {} found)", N_COLS, x);
         }
 
-        string_view rest(p);
+        std::string_view rest(p);
         if (!rest.empty() && rest.back() == '\n') rest.remove_suffix(1);
         if (!rest.empty() && rest.back() == '\r') rest.remove_suffix(1);
 

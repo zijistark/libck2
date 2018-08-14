@@ -46,11 +46,11 @@ public:
     auto const& floc() const noexcept { return _fl; }
     auto&       floc()       noexcept { return _fl; }
 
-    FLError(const FLoc& fl_, const string& msg)
+    FLError(const FLoc& fl_, const std::string& msg)
         : Base(fl_.to_string_prefix() + msg), _fl(fl_) {}
 
     template<typename... Args>
-    FLError(const FLoc& fl_, string_view format, const Args& ...args)
+    FLError(const FLoc& fl_, std::string_view format, const Args& ...args)
         : Base(fl_.to_string_prefix() + fmt::vformat(format, fmt::make_format_args(args...))), _fl(fl_) {}
 
 private:
@@ -68,7 +68,7 @@ struct FLErrorFactory
         : _fl_func(fl_func_) {}
 
     template<typename... Args>
-    constexpr auto operator()(string_view format, Args&& ...args) const
+    constexpr auto operator()(std::string_view format, Args&& ...args) const
     {
         return FLError(_fl_func(), format, std::forward<Args>(args)...);
     }
@@ -85,7 +85,7 @@ struct FLErrorStaticFactory
     FLErrorStaticFactory(const FLoc& fl_) : _fl(fl_) {}
 
     template<typename... Args>
-    constexpr auto operator()(string_view format, Args&& ...args) const
+    constexpr auto operator()(std::string_view format, Args&& ...args) const
     {
         return FLError(_fl, format, std::forward<Args>(args)...);
     }

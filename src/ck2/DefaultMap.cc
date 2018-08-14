@@ -114,7 +114,7 @@ DefaultMap::DefaultMap(const VFS& vfs)
                 auto&& [k, v] = *it;
 
                 if (!s.value().is_string())
-                    throw prs.err(s.value(), "Invalid value type for '{}' (requires a string)", k);
+                    throw prs.err(s.value(), "Invalid value type for '{}' (requires a std::string)", k);
 
                 v = s.value().as_string();
             }

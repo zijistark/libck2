@@ -23,7 +23,6 @@
 NAMESPACE_CK2;
 
 
-using std::unique_ptr;
 typedef fp_decimal<3> fp3;
 class block;
 class list;
@@ -64,8 +63,8 @@ private:
         date  d;
         fp3   f;
         binop o;
-        unique_ptr<block> up_block;
-        unique_ptr<list>  up_list;
+        std::unique_ptr<block> up_block;
+        std::unique_ptr<list>  up_list;
 
         /* tell C++ that we'll manage the nontrivial union members outside of this union */
         data_union() {}
@@ -84,11 +83,11 @@ public:
     object(fp3 f,   const Loc& l) : _type(DECIMAL),   _loc(l) { _data.f = f; }
     object(binop o, const Loc& l) : _type(BINARY_OP), _loc(l) { _data.o = o; }
 
-    object(unique_ptr<block> up, const Loc& l) : _type(BLOCK), _loc(l) {
-        new (&_data.up_block) unique_ptr<block>(std::move(up));
+    object(std::unique_ptr<block> up, const Loc& l) : _type(BLOCK), _loc(l) {
+        new (&_data.up_block) std::unique_ptr<block>(std::move(up));
     }
-    object(unique_ptr<list> up,  const Loc& l) : _type(LIST),  _loc(l) {
-        new (&_data.up_list) unique_ptr<list>(std::move(up));
+    object(std::unique_ptr<list> up,  const Loc& l) : _type(LIST),  _loc(l) {
+        new (&_data.up_list) std::unique_ptr<list>(std::move(up));
     }
 
     /* move-assignment operator */
@@ -126,12 +125,12 @@ public:
     block* as_block()     const noexcept { return _data.up_block.get(); }
     list*  as_list()      const noexcept { return _data.up_list.get(); }
 
-    // void set_precomments(unique_ptr<comment_block> up) noexcept { _up_precomments = std::move(up); }
+    // void set_precomments(std::unique_ptr<comment_block> up) noexcept { _up_precomments = std::move(up); }
     // void set_postcomment(char* str) noexcept { _postcomment = str; }
 
     /* convenience equality operator overloads */
     bool operator==(const char* s)        const noexcept { return is_string() && strcmp(as_string(), s) == 0; }
-    bool operator==(const string& s) const noexcept { return is_string() && s == as_string(); }
+    bool operator==(const std::string& s) const noexcept { return is_string() && s == as_string(); }
     bool operator==(int i)   const noexcept { return is_integer() && as_integer() == i; }
     bool operator==(date d)  const noexcept { return is_date() && as_date() == d; }
     bool operator==(fp3 f)   const noexcept { return is_number() && as_decimal() == f; }
@@ -139,13 +138,13 @@ public:
 
     /* inequality operator overloads (OK, do I really have to be this explicit by default, C++?) */
     bool operator!=(const char* arg)        const noexcept { return !(*this == arg); }
-    bool operator!=(const string& arg) const noexcept { return !(*this == arg); }
+    bool operator!=(const std::string& arg) const noexcept { return !(*this == arg); }
     bool operator!=(int arg)   const noexcept { return !(*this == arg); }
     bool operator!=(date arg)  const noexcept { return !(*this == arg); }
     bool operator!=(fp3 arg)   const noexcept { return !(*this == arg); }
     bool operator!=(binop arg) const noexcept { return !(*this == arg); }
 
-    void print(ostream&, uint indent = 0) const;
+    void print(std::ostream&, uint indent = 0) const;
 };
 
 
@@ -159,7 +158,7 @@ public:
     list() = delete;
     list(parser&);
 
-    void print(ostream&, uint indent = 0) const;
+    void print(std::ostream&, uint indent = 0) const;
 
     object&       operator[](size_t i)       noexcept { return _vec[i]; }
     const object& operator[](size_t i) const noexcept { return _vec[i]; }
@@ -188,7 +187,7 @@ public:
     const object& op()    const noexcept { return _op; }
     const object& value() const noexcept { return _v; }
 
-    void print(ostream&, uint indent = 0) const;
+    void print(std::ostream&, uint indent = 0) const;
 };
 
 
@@ -227,7 +226,7 @@ public:
     block() { }
     block(parser&, bool is_root = false, bool is_save = false);
 
-    void print(ostream&, uint indent = 0) const;
+    void print(std::ostream&, uint indent = 0) const;
 
     vec_t::size_type      size()  const noexcept { return _vec.size(); }
     bool                  empty() const noexcept { return size() == 0; }
@@ -261,7 +260,7 @@ protected:
 
     lexer _lex;
     cstr_pool<char> _string_pool;
-    unique_ptr<block> _up_root_block;
+    std::unique_ptr<block> _up_root_block;
     //error_queue _errors;
 
     char* strdup(const char* s) { return _string_pool.strdup(s); }
@@ -310,7 +309,7 @@ protected:
 
 public:
     parser() = delete;
-    parser(const string& p, bool is_save = false) : parser(p.c_str(), is_save) {}
+    parser(const std::string& p, bool is_save = false) : parser(p.c_str(), is_save) {}
     parser(const fs::path& p, bool is_save = false) : parser(p.generic_string().c_str(), is_save) {}
     parser(const char* p, bool is_save = false) : _lex(p), _tq_done(false), _tq_head_idx(0), _tq_n(0) {
         // hook our preallocated token text buffers into the lookahead queue
@@ -332,15 +331,15 @@ public:
     auto floc(const object& obj)   const noexcept { return FLoc(path(), obj.loc()); }
     auto floc()                    const noexcept { return FLoc(path()); }
 
-    template<typename... Args> auto err(const Location& loc, string_view format, Args&& ...args) const {
+    template<typename... Args> auto err(const Location& loc, std::string_view format, Args&& ...args) const {
         return FLError(floc(loc), format, std::forward<Args>(args)...);
     }
 
-    template<typename... Args> auto err(const object& obj, string_view format, Args&& ...args) const {
+    template<typename... Args> auto err(const object& obj, std::string_view format, Args&& ...args) const {
         return FLError(floc(obj), format, std::forward<Args>(args)...);
     }
 
-    template<typename... Args> auto err(string_view format, Args&& ...args) const {
+    template<typename... Args> auto err(std::string_view format, Args&& ...args) const {
         return FLError(floc(), format, std::forward<Args>(args)...);
     }
 };
