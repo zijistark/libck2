@@ -29,70 +29,70 @@ typedef unsigned char byte_t;
 template<typename CharT = char, const size_t _CHUNK_SZ = 1024, const size_t _ALIGNMENT = alignof(CharT*)>
 class cstr_pool {
 public:
-    // 1 pointer overhead assumed per chunk
-    static const size_t MAX_UNALIGNED_BYTES = sizeof(CharT[_CHUNK_SZ]) - sizeof(void*);
-    static const size_t MAX_BYTES = MAX_UNALIGNED_BYTES - MAX_UNALIGNED_BYTES % _ALIGNMENT;
-    static const size_t MAX_SZ = MAX_BYTES / sizeof(CharT);
-    static_assert(MAX_BYTES % sizeof(CharT) == 0, "cstr_pool type/alignment parameters contradict each other and cannot be implemented");
+  // 1 pointer overhead assumed per chunk
+  static const size_t MAX_UNALIGNED_BYTES = sizeof(CharT[_CHUNK_SZ]) - sizeof(void*);
+  static const size_t MAX_BYTES = MAX_UNALIGNED_BYTES - MAX_UNALIGNED_BYTES % _ALIGNMENT;
+  static const size_t MAX_SZ = MAX_BYTES / sizeof(CharT);
+  static_assert(MAX_BYTES % sizeof(CharT) == 0, "cstr_pool type/alignment parameters contradict each other and cannot be implemented");
 
 private:
-    struct chunk {
-        alignas(CharT) byte_t data[MAX_BYTES];
-    };
+  struct chunk {
+    alignas(CharT) byte_t data[MAX_BYTES];
+  };
 
-    typedef std::forward_list<chunk> list_t; // singly-linked list, hence the 1 pointer overhead assumed
-    list_t  _chunks; // buffers
-    void*   _p; // ptr to beginning of usable buffer space
-    size_t  _capacity; // _capacity bytes remaining in _p_buf
+  typedef std::forward_list<chunk> list_t; // singly-linked list, hence the 1 pointer overhead assumed
+  list_t  _chunks; // buffers
+  void*   _p; // ptr to beginning of usable buffer space
+  size_t  _capacity; // _capacity bytes remaining in _p_buf
 
-    void grow() {
-        _chunks.emplace_front();
-        _p = _chunks.front().data;
-        _capacity = MAX_BYTES;
+  void grow() {
+    _chunks.emplace_front();
+    _p = _chunks.front().data;
+    _capacity = MAX_BYTES;
+  }
+
+  CharT* aligned_alloc(size_t sz) {
+    size_t sz_bytes = sz * sizeof(CharT);
+
+    if (std::align(_ALIGNMENT, sz_bytes, _p, _capacity)) {
+      /* alignment criteria satisfied!
+       * _p_buf & _capacity were modified according to alignment needs but nothing else */
+      CharT* str = reinterpret_cast<CharT*>(_p);
+      _p = (byte_t*)_p + sz_bytes;
+      _capacity -= sz_bytes;
+      return str;
     }
 
-    CharT* aligned_alloc(size_t sz) {
-        size_t sz_bytes = sz * sizeof(CharT);
-
-        if (std::align(_ALIGNMENT, sz_bytes, _p, _capacity)) {
-            /* alignment criteria satisfied!
-             * _p_buf & _capacity were modified according to alignment needs but nothing else */
-            CharT* str = reinterpret_cast<CharT*>(_p);
-            _p = (byte_t*)_p + sz_bytes;
-            _capacity -= sz_bytes;
-            return str;
-        }
-
-        return nullptr;
-    }
+    return nullptr;
+  }
 
 public:
-    /* provided for easy override via template specialization */
-    static inline size_t generic_strlen(const CharT* s) { return strlen(s); }
+  /* provided for easy override via template specialization */
+  static inline size_t generic_strlen(const CharT* s) { return strlen(s); }
 
-    /* default ctor, only ctor */
-    cstr_pool() : _p(nullptr), _capacity(0) {}
+  /* default ctor, only ctor */
+  cstr_pool() : _p(nullptr), _capacity(0) {}
 
-    /* strdup -- duplicate a string (allocate, copy, and return) */
-    CharT* strdup(const CharT* src) {
-        size_t len = generic_strlen(src);
-        size_t sz = len + 1;
+  /* strdup -- duplicate a string (allocate, copy, and return) */
+  CharT* strdup(const CharT* src) {
+    size_t len = generic_strlen(src);
+    size_t sz = len + 1;
 
-        if (sz > MAX_SZ)
-            throw std::logic_error("cstr_pool::strdup() tried to allocate string larger than maximum chunk length");
+    if (sz > MAX_SZ)
+      throw std::logic_error("cstr_pool::strdup() tried to allocate string larger than maximum chunk length");
 
-        CharT* dst;
+    CharT* dst;
 
-        if ((dst = aligned_alloc(sz)) == nullptr) {
-            /* will have to allocate a new chunk to satisfy that request */
-            grow();
-            dst = aligned_alloc(sz);
+    if ((dst = aligned_alloc(sz)) == nullptr) {
+      /* will have to allocate a new chunk to satisfy that request */
+      grow();
+      dst = aligned_alloc(sz);
 
-            /* should never have failed after grabbing a fresh, new chunk, because sz <= MAX_SZ */
-            assert(dst != nullptr && "could not satisfy aligned_alloc even after allocating new chunk");
-        }
-
-        memcpy(dst, src, sz * sizeof(CharT));
-        return dst;
+      /* should never have failed after grabbing a fresh, new chunk, because sz <= MAX_SZ */
+      assert(dst != nullptr && "could not satisfy aligned_alloc even after allocating new chunk");
     }
+
+    memcpy(dst, src, sz * sizeof(CharT));
+    return dst;
+  }
 };

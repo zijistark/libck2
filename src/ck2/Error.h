@@ -12,17 +12,17 @@ NAMESPACE_CK2;
 
 
 class Error : public std::runtime_error {
-    using Base = std::runtime_error;
+  using Base = std::runtime_error;
 
 public:
-    Error(const std::string& msg) : Base(msg) {}
+  Error(const std::string& msg) : Base(msg) {}
 
-    // Error(const char* format, fmt::format_args args)
-    //     : std::runtime_error( fmt::vformat(format, args) ) {}
+  // Error(const char* format, fmt::format_args args)
+  //     : std::runtime_error( fmt::vformat(format, args) ) {}
 
-    template<typename... Args>
-    Error(std::string_view format, const Args& ...args)
-        : Base( fmt::vformat(format, fmt::make_format_args(args...) ) ) {}
+  template<typename... Args>
+  Error(std::string_view format, const Args& ...args)
+    : Base( fmt::vformat(format, fmt::make_format_args(args...) ) ) {}
 };
 
 

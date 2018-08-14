@@ -16,20 +16,20 @@ NAMESPACE_CK2;
  */
 
 class cstr {
-    const char*  _ptr;
+  const char*  _ptr;
 
 public:
-    cstr(const char* ptr = nullptr) : _ptr(ptr) {}
+  cstr(const char* ptr = nullptr) : _ptr(ptr) {}
 
-    bool empty() const noexcept { return (_ptr == nullptr || _ptr[0] == '\0'); }
-    bool null()  const noexcept { return (_ptr == nullptr); }
+  bool empty() const noexcept { return (_ptr == nullptr || _ptr[0] == '\0'); }
+  bool null()  const noexcept { return (_ptr == nullptr); }
 
-    /* equivalence & lexicographical ordering */
-    bool operator==(const cstr& other) const noexcept { return strcmp(_ptr, other._ptr) == 0; }
-    bool operator<(const cstr& other)  const noexcept { return strcmp(_ptr, other._ptr) < 0; }
+  /* equivalence & lexicographical ordering */
+  bool operator==(const cstr& other) const noexcept { return strcmp(_ptr, other._ptr) == 0; }
+  bool operator<(const cstr& other)  const noexcept { return strcmp(_ptr, other._ptr) < 0; }
 
-    /* gimme that pointer back! */
-    char const* data() const noexcept { return _ptr; }
+  /* gimme that pointer back! */
+  char const* data() const noexcept { return _ptr; }
 };
 
 
@@ -39,26 +39,26 @@ NAMESPACE_CK2_END;
 /* inject std::hash<ck2::cstr> specialization */
 
 namespace std {
-    template<> struct hash<ck2::cstr> {
-        typedef ck2::cstr argument_type;
-        typedef size_t result_type;
+  template<> struct hash<ck2::cstr> {
+    typedef ck2::cstr argument_type;
+    typedef size_t result_type;
 
-        static_assert(sizeof(size_t) == 8,
-                      "ck2::cstr's hash implementation requires 64-bit target to function correctly");
+    static_assert(sizeof(size_t) == 8,
+            "ck2::cstr's hash implementation requires 64-bit target to function correctly");
 
-        /* FNV/1a algorithm applied to null-terminated C-string with unknown length, 64-bit */
-        size_t operator()(const ck2::cstr& cs) const noexcept {
-            size_t hash = 0xCBF29CE484222325;
-            auto ptr = cs.data();
+    /* FNV/1a algorithm applied to null-terminated C-string with unknown length, 64-bit */
+    size_t operator()(const ck2::cstr& cs) const noexcept {
+      size_t hash = 0xCBF29CE484222325;
+      auto ptr = cs.data();
 
-            while (*ptr) {
-                hash ^= (unsigned) *ptr++;
-                hash *= 0x100000001B3;
-            }
+      while (*ptr) {
+        hash ^= (unsigned) *ptr++;
+        hash *= 0x100000001B3;
+      }
 
-            return hash;
-        }
-    };
+      return hash;
+    }
+  };
 }
 
 #endif

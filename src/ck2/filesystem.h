@@ -23,25 +23,25 @@ using unique_file_ptr = std::unique_ptr< std::FILE, int (*)(std::FILE*) >;
 
 
 struct PathError : public Error {
-    PathError(const std::string& msg_, const fs::path& path_) : Error(msg_), _path(path_) {}
-    auto&       path()       noexcept { return _path; }
-    const auto& path() const noexcept { return _path; }
+  PathError(const std::string& msg_, const fs::path& path_) : Error(msg_), _path(path_) {}
+  auto&       path()       noexcept { return _path; }
+  const auto& path() const noexcept { return _path; }
 
 protected:
-    fs::path _path;
+  fs::path _path;
 };
 
 
 struct PathNotFoundError : public PathError {
-    PathNotFoundError(const fs::path& path_)
-        : PathError(fmt::format("Path not found: {}", path_.generic_string()), path_) {}
+  PathNotFoundError(const fs::path& path_)
+    : PathError(fmt::format("Path not found: {}", path_.generic_string()), path_) {}
 };
 
 
 struct PathTypeError : public PathError {
-    PathTypeError(const fs::path& path_) // TODO: tell the user what type of file it does point to vs. expected
-        : PathError(fmt::format("Path points to unexpected file type (e.g., directory vs. regular file): {}",
-                                path_.generic_string()), path_) {}
+  PathTypeError(const fs::path& path_) // TODO: tell the user what type of file it does point to vs. expected
+    : PathError(fmt::format("Path points to unexpected file type (e.g., directory vs. regular file): {}",
+                path_.generic_string()), path_) {}
 };
 
 

@@ -20,27 +20,27 @@ namespace strutil {
 // (i.e., can work on other string_views or on const pointers to character arrays).
 static inline auto strsep(char** sptr, int delim)
 {
-    auto start = *sptr;
+  auto start = *sptr;
 
-    if (auto p = (start) ? strchr(start, delim) : nullptr) {
-        *p = '\0';
-        *sptr = p + 1;
-    }
-    else
-        *sptr = nullptr;
+  if (auto p = (start) ? strchr(start, delim) : nullptr) {
+    *p = '\0';
+    *sptr = p + 1;
+  }
+  else
+    *sptr = nullptr;
 
-    return start;
+  return start;
 }
 
 
 // test if an entire string is effectively empty (literally or just full of blank characters or EOL characters)
 static inline constexpr auto is_blank(std::string_view s)
 {
-    for (const auto& c : s)
-        if ( !(c == ' ' || c == '\t' || c == '\n' || c == '\r') )
-            return false;
+  for (const auto& c : s)
+    if ( !(c == ' ' || c == '\t' || c == '\n' || c == '\r') )
+      return false;
 
-    return true;
+  return true;
 }
 
 //// mdh_strncpy
@@ -64,10 +64,10 @@ static inline constexpr auto is_blank(std::string_view s)
 // buffer.
 
 static inline auto mdh_strncpy(char* dst, size_t dst_sz, const char* const src, size_t length) {
-    size_t n = (length > dst_sz) ? dst_sz : length;
-    memcpy(dst, src, n);
-    dst[n] = '\0'; // only sometimes necessary (when not using as a replacement for strcpy on well-formed input)
-    return n;
+  size_t n = (length > dst_sz) ? dst_sz : length;
+  memcpy(dst, src, n);
+  dst[n] = '\0'; // only sometimes necessary (when not using as a replacement for strcpy on well-formed input)
+  return n;
 }
 
 

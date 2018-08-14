@@ -11,29 +11,29 @@ NAMESPACE_CK2;
 
 
 class FileLocation : public Location {
-    using Base = Location;
+  using Base = Location;
 public:
-    FileLocation(const fs::path& path_, const Location& loc_) : Base(loc_), _path(path_) {}
-    FileLocation(const fs::path& path_, uint line_ = 0, uint col_ = 0) : Base(line_, col_), _path(path_) {}
+  FileLocation(const fs::path& path_, const Location& loc_) : Base(loc_), _path(path_) {}
+  FileLocation(const fs::path& path_, uint line_ = 0, uint col_ = 0) : Base(line_, col_), _path(path_) {}
 
-    auto const& path() const noexcept { return _path; }
-    auto&       path()       noexcept { return _path; }
+  auto const& path() const noexcept { return _path; }
+  auto&       path()       noexcept { return _path; }
 
-    auto to_string() const
-    {
-        auto ls = Base::to_string();
-        return ls.empty() ? _path.generic_string() : _path.generic_string() + ":" + ls;
-    }
+  auto to_string() const
+  {
+    auto ls = Base::to_string();
+    return ls.empty() ? _path.generic_string() : _path.generic_string() + ":" + ls;
+  }
 
-    auto to_string_prefix() const { return to_string() + ": "; }
+  auto to_string_prefix() const { return to_string() + ": "; }
 
-    auto to_string_suffix() const
-    {
-        return Base::to_string_suffix() + fmt::format(" in '{}'", _path.generic_string());
-    }
+  auto to_string_suffix() const
+  {
+    return Base::to_string_suffix() + fmt::format(" in '{}'", _path.generic_string());
+  }
 
 private:
-    fs::path _path;
+  fs::path _path;
 };
 
 
@@ -41,20 +41,20 @@ using FLoc = FileLocation;
 
 
 class FLError : public Error {
-    using Base = Error;
+  using Base = Error;
 public:
-    auto const& floc() const noexcept { return _fl; }
-    auto&       floc()       noexcept { return _fl; }
+  auto const& floc() const noexcept { return _fl; }
+  auto&       floc()       noexcept { return _fl; }
 
-    FLError(const FLoc& fl_, const std::string& msg)
-        : Base(fl_.to_string_prefix() + msg), _fl(fl_) {}
+  FLError(const FLoc& fl_, const std::string& msg)
+    : Base(fl_.to_string_prefix() + msg), _fl(fl_) {}
 
-    template<typename... Args>
-    FLError(const FLoc& fl_, std::string_view format, const Args& ...args)
-        : Base(fl_.to_string_prefix() + fmt::vformat(format, fmt::make_format_args(args...))), _fl(fl_) {}
+  template<typename... Args>
+  FLError(const FLoc& fl_, std::string_view format, const Args& ...args)
+    : Base(fl_.to_string_prefix() + fmt::vformat(format, fmt::make_format_args(args...))), _fl(fl_) {}
 
 private:
-    FLoc _fl;
+  FLoc _fl;
 };
 
 
@@ -64,17 +64,17 @@ private:
 template<typename FLocFuncT>
 struct FLErrorFactory
 {
-    constexpr FLErrorFactory(FLocFuncT& fl_func_)
-        : _fl_func(fl_func_) {}
+  constexpr FLErrorFactory(FLocFuncT& fl_func_)
+    : _fl_func(fl_func_) {}
 
-    template<typename... Args>
-    constexpr auto operator()(std::string_view format, Args&& ...args) const
-    {
-        return FLError(_fl_func(), format, std::forward<Args>(args)...);
-    }
+  template<typename... Args>
+  constexpr auto operator()(std::string_view format, Args&& ...args) const
+  {
+    return FLError(_fl_func(), format, std::forward<Args>(args)...);
+  }
 
 private:
-    FLocFuncT& _fl_func;
+  FLocFuncT& _fl_func;
 };
 
 
@@ -82,16 +82,16 @@ private:
 // binary files)
 struct FLErrorStaticFactory
 {
-    FLErrorStaticFactory(const FLoc& fl_) : _fl(fl_) {}
+  FLErrorStaticFactory(const FLoc& fl_) : _fl(fl_) {}
 
-    template<typename... Args>
-    constexpr auto operator()(std::string_view format, Args&& ...args) const
-    {
-        return FLError(_fl, format, std::forward<Args>(args)...);
-    }
+  template<typename... Args>
+  constexpr auto operator()(std::string_view format, Args&& ...args) const
+  {
+    return FLError(_fl, format, std::forward<Args>(args)...);
+  }
 
 private:
-    FLoc _fl;
+  FLoc _fl;
 };
 
 
