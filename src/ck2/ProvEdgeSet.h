@@ -36,6 +36,11 @@ struct ProvEdgeSet {
   auto size()    const noexcept { return _M_edges.size(); }
   auto empty()   const noexcept { return size() == 0; }
 
+  auto& front() const noexcept { return _M_edges.front(); }
+  auto& front()       noexcept { return _M_edges.front(); }
+  auto& back()  const noexcept { return _M_edges.back(); }
+  auto& back()        noexcept { return _M_edges.back(); }
+
 private:
   using P16 = Point<uint16_t>;
 
