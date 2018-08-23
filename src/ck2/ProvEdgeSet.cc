@@ -52,6 +52,8 @@ ProvEdgeSet::ProvEdgeSet(const ProvMap& pm)
   if (try_horizontal_edge(max_x, 0, p_pix++, horizontal_seg, endpoint_map))
     finish_segment(Direction::Horizontal, 0, horizontal_seg, endpoint_map);
 
+  horizontal_seg.reset();
+
   /* handle middle rows */
 
   for (uint y = 1; y < max_y; ++y)
@@ -66,6 +68,8 @@ ProvEdgeSet::ProvEdgeSet(const ProvMap& pm)
     // handle middle-right pixel
     if (try_horizontal_edge(max_x, y, p_pix++, horizontal_seg, endpoint_map))
       finish_segment(Direction::Horizontal, y, horizontal_seg, endpoint_map);
+
+    horizontal_seg.reset();
   }
 
   /* handle bottom row */
@@ -76,6 +80,8 @@ ProvEdgeSet::ProvEdgeSet(const ProvMap& pm)
 
   // ... and the bottom-right pixel actually cannot produce any new paraxial edges, so we're done with paraxial
   // segment scanning.
+
+  horizontal_seg.reset();
 
   if (_M_edges.empty())
     return; // Within this context, it's valid to have not produced any edges at all, but we should quit if so.
