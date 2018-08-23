@@ -1,9 +1,11 @@
 #ifndef LIBCK2_POINT_H
 #define LIBCK2_POINT_H
 
+#include <ostream>
 #include <type_traits>
 
 #include "common.h"
+#include "fmt/ostream.h"
 
 
 NAMESPACE_CK2;
@@ -36,6 +38,11 @@ struct Point {
   }
 
   constexpr auto operator!=(Point p) const noexcept { return !(*this == p); }
+
+  friend std::ostream& operator<<(std::ostream& o, const Point& pt)
+  {
+    return o << '(' << pt.x << ',' << pt.y << ')';
+  }
 
   static_assert(std::is_arithmetic<CoordT>::value && std::is_trivial<CoordT>::value,
                 "Coordinate type for ck2::Point must be arithmetic and trivially copyable/constructible.");
