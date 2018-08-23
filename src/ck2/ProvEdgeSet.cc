@@ -76,7 +76,7 @@ ProvEdgeSet::ProvEdgeSet(const ProvMap& pm)
 
   for (uint x = 0; x < max_x; ++x, ++p_pix)
     if (try_vertical_edge(x, max_y, p_pix, vertical_seg[x], endpoint_map))
-      finish_segment(Direction::Vertical, x, horizontal_seg, endpoint_map);
+      finish_segment(Direction::Vertical, x, vertical_seg[x], endpoint_map);
 
   // ... and the bottom-right pixel actually cannot produce any new paraxial edges, so we're done with paraxial
   // segment scanning.
