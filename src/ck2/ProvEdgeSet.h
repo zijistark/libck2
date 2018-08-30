@@ -41,13 +41,13 @@ struct ProvEdgeSet {
   auto& back()  const noexcept { return _M_edges.back(); }
   auto& back()        noexcept { return _M_edges.back(); }
 
-private:
   using P16 = Point<uint16_t>;
-
   // LPoint has a coordinate type that's local to this ProvEdgeSet (might not be the same as the global
   // coordinate type in the future).
   using LPoint  = P16;
   using coord_t = LPoint::value_type;
+
+private:
   using id_pair = std::pair<prov_id_t, prov_id_t>;
 
 #pragma pack(push, 1)
@@ -153,7 +153,6 @@ private:
   void trace_edge_end(const EdgeEnd, uint edge_idx, EndpointMap&);
 
   std::vector< std::unique_ptr< ProvEdge > > _M_edges;
-
   const prov_id_t* _M_grid; // row-major order
   coord_t          _M_width;
   coord_t          _M_height;
