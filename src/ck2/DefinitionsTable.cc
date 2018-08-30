@@ -98,20 +98,17 @@ DefinitionsTable::DefinitionsTable(const VFS& vfs, const DefaultMap& dm)
     if (!dm.is_valid_province(n[0]))
       throw flerr("Invalid province ID #{}", n[0]);
 
-    // commented-out because I'm not entirely sure that this is a 100% valid constraint anymore.
-    /*
     if ((uint)n[0] != n_line - 1)
       throw flerr("CSV record with province ID #{} is out of order or IDs were skipped", n[0]);
-    */
 
     _v.emplace_back(n[0], RGB{ (uint)n[1], (uint)n[2], (uint)n[3] }, n_str[4], rest);
 
     // TODO: Find a different way to ignore extranneous province entries in definitions.csv (e.g., vanilla and
     // SWMH both have some extra 2-10,000 extra lines simply for pre-filled RGB values should more provinces be
-    // added). Why? For the same reason I commented out the error check for the current province ID not being
-    // equal to the current line number (minus 1) above; I'm not sure that entries need to appear in order, and
-    // if they don't, quitting reading entries as soon as we see the max. province ID will fail to read all of
-    // the necessary data.
+    // added). Currently, we're just quitting when we see the max ID. Quitting reading entries as soon as we see
+    // the max. province ID will fail to read all of the necessary data (ergo, will also fail to rewrite all the
+    // necessary data should it be rewritten).
+
     if ((unsigned)n[0] == dm.max_province_id())
       break;
   }
