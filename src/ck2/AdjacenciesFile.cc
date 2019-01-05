@@ -123,6 +123,7 @@ void AdjacenciesFile::write(const fs::path& out_path)
 
   for (const auto& adj : _v)
   {
+    if (adj.deleted) continue;
     if (adj.from) os << adj.from; // treat 0-value as blank
     os << ';';
     if (adj.to) os << adj.to; // treat 0-value as blank

@@ -23,9 +23,10 @@ public:
     uint through;
     std::string type;
     std::string comment;
+    bool deleted;
 
     Adjacency(uint _from, uint _to, uint _through, std::string_view _type, std::string_view _comment)
-      : from(_from), to(_to), through(_through), type(_type), comment(_comment) {}
+      : from(_from), to(_to), through(_through), type(_type), comment(_comment), deleted(false) {}
   };
 
 public:
