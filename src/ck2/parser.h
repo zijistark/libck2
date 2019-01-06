@@ -374,9 +374,11 @@ bool looks_like_title(const char*);
 
 
 NAMESPACE_CK2_END;
-#endif
 
 inline std::ostream& operator<<(std::ostream& os, const ck2::block& a)     { a.print(os); return os; }
 inline std::ostream& operator<<(std::ostream& os, const ck2::list& a)      { a.print(os); return os; }
 inline std::ostream& operator<<(std::ostream& os, const ck2::statement& a) { a.print(os); return os; }
 inline std::ostream& operator<<(std::ostream& os, const ck2::object& a)    { a.print(os); return os; }
+
+#endif
+
