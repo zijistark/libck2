@@ -3,7 +3,7 @@
 vars = Variables()
 
 vars.Add(
-	EnumVariable('BUILD_TYPE', 'Set build type', 'debug',
+	EnumVariable('BUILD_TYPE', 'Set build type', 'release_debug',
 		allowed_values=('debug_max', 'debug', 'release_debug', 'release'),
 		ignorecase=2)
 )
