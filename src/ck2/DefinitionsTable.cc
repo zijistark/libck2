@@ -131,7 +131,7 @@ void DefinitionsTable::write(const fs::path& path) const {
 
   fmt::print(f, "province;red;green;blue;name;x\n");
 
-  for (const auto& r : _v)
+  for (const auto& r : *this)
     fmt::print(f, "{};{};{};{};{};{}\n",
            r.id, r.color.red(), r.color.green(), r.color.blue(), r.name,
            r.rest.empty() ? "x" : r.rest);
