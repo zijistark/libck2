@@ -31,11 +31,11 @@ using prov_id_t = uint16_t;
 using char_id_t = int32_t;
 
 #define LIBCK2_VERSION_MAJOR "0"
-#define LIBCK2_VERSION_MINOR "12"
+#define LIBCK2_VERSION_MINOR "13"
 #define LIBCK2_VERSION_PATCH "0"
 #define LIBCK2_VERSION_BUILD "" // might be, e.g., "-rc3" or the like in the future
 #define LIBCK2_VERSION_MAJOR_N (0)
-#define LIBCK2_VERSION_MINOR_N (12)
+#define LIBCK2_VERSION_MINOR_N (13)
 #define LIBCK2_VERSION_PATCH_N (0)
 #define LIBCK2_VERSION_STRING "v" LIBCK2_VERSION_MAJOR "." LIBCK2_VERSION_MINOR "." LIBCK2_VERSION_PATCH LIBCK2_VERSION_BUILD
 

@@ -53,7 +53,7 @@ Major Support for `Crusader Kings III`_
 ---------------------------------------
 
 Foremost, these upgrades for UTF-8 encoding and such are toward the end of of adding comprehensive support, for both low-level and high-level APIs, for
-Paradox's upcoming title `Crusader Kings III`_ (i.e., CK3, a role-playing grand strategy game sequel to CK2). As the author of this library is an established modder (among other things) for Crusader Kings II, you can expect Crusader Kings III support to just as rich if not moreso.
+Paradox's upcoming title `Crusader Kings III`_ (i.e., CK3, a role-playing grand strategy game sequel to CK2). As the author of this library is an established modder (among other things) for Crusader Kings II, you can expect Crusader Kings III support to be just as rich if not moreso.
 
 .. _`Crusader Kings III`: https://www.crusaderkings.com/
 

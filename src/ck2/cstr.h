@@ -16,7 +16,7 @@ NAMESPACE_CK2;
  */
 
 class cstr {
-  const char*  _ptr;
+  const char* _ptr;
 
 public:
   cstr(const char* ptr = nullptr) : _ptr(ptr) {}

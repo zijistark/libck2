@@ -9,7 +9,8 @@
 NAMESPACE_CK2;
 
 
-struct binary_op_text {
+struct binary_op_text
+{
   const char* text;
   binary_op op;
 };
@@ -24,21 +25,25 @@ const binary_op_text BINOP_TBL[] = {
 };
 
 
-block::block(parser& prs, bool is_root, bool is_save) {
+block::block(parser& prs, bool is_root, bool is_save)
+{
   token t;
 
-  if (is_root && is_save) {
+  if (is_root && is_save)
+  {
     /* skip over CK2txt header (savegames only) */
     prs.next_expected(&t, token::STR);
   }
 
-  while (true) {
+  while (true)
+  {
     prs.next(&t, is_root);
 
     if (t.type() == token::END)
       return;
 
-    if (t.type() == token::CLOSE) {
+    if (t.type() == token::CLOSE)
+    {
       if (is_root && !is_save) // closing braces are only bad at root level
         throw prs.err("Unmatched closing brace");
 
@@ -49,7 +54,7 @@ block::block(parser& prs, bool is_root, bool is_save) {
     object key;
 
     if (t.type() == token::STR)
-      key = object{ prs.strdup(t.text()), t.loc() };
+      key = object{ t.text(), t.loc() };
     else if (t.type() == token::DATE)
       key = object{ date{ t.text() }, t.loc() };
     else if (t.type() == token::INTEGER)
@@ -63,36 +68,39 @@ block::block(parser& prs, bool is_root, bool is_save) {
     object op;
 
     for (auto const& bop : BINOP_TBL)
-      if (strcmp(t.text(), bop.text) == 0) {
+    {
+      if (strcmp(t.text(), bop.text) == 0)
+      {
         op = object{ bop.op, t.loc() };
         break;
       }
+    }
 
     /* on to value... */
-    object val;
     prs.next(&t);
+    object val;
 
-    if (t.type() == token::OPEN) {
-      // currently our only token lookahead case required
-
+    if (t.type() == token::OPEN) // currently our only token lookahead case required
+    {
       token* pt1 = prs.peek<0>(); // like next() but doesn't modify the input
       token* pt2 = prs.peek<1>(); // ... whereas this is time travel
 
-      if (pt1 && pt1->type() == token::CLOSE) { // empty block (or list, but we choose to see it as a block)
+      if (pt1 && pt1->type() == token::CLOSE) // empty block (or list, but we choose to see it as a block)
+      {
         // FIXME: optimize: empty blocks are a waste of memory and cycles and ambiguous with empty lists, so add
         // a static object type (i.e., one of the possible dynamic types for ck2::object) that codifies an empty
         // block OR list (vector syntax nodes, essentially)
         prs.next(&t); // suspicions confirmed, consume token
-        val = object{ std::make_unique<block>(), t.loc() };
+        val = object{ std::make_shared<block>(), t.loc() };
       }
       // all but an operator in this position implies this will be a list
       else if (pt2 && pt2->type() != token::OPERATOR)
-        val = object{ std::make_unique<list>(prs), t.loc() };
+        val = object{ std::make_shared<list>(prs), t.loc() };
       else // but with the operator in position, it's definitely a block
-        val = object{ std::make_unique<block>(prs), t.loc() };
+        val = object{ std::make_shared<block>(prs), t.loc() };
     }
     else if (t.type() == token::STR || t.type() == token::QSTR)
-      val = object{ prs.strdup(t.text()), t.loc() };
+      val = object{ t.text(), t.loc() };
     else if (t.type() == token::QDATE || t.type() == token::DATE)
       val = object{ date{ t.text() }, t.loc() };
     else if (t.type() == token::DECIMAL)
@@ -102,65 +110,30 @@ block::block(parser& prs, bool is_root, bool is_save) {
     else
       prs.unexpected_token(t);
 
-    _vec.emplace_back(key, op, val);
+    _v.emplace_back(key, op, val);
 
     if (key.is_string())
-      _map[key.as_string()] = _vec.size() - 1;
+      _map[key.as_string()] = _v.size() - 1;
   }
 }
 
 
-void object::destroy() noexcept {
-  switch (_type) {
-    case NIL:
-    case STRING:
-    case INTEGER:
-    case DATE:
-    case DECIMAL:
-    case BINARY_OP:
-      break;
-    case BLOCK: _data.up_block.~unique_ptr<block>(); break;
-    case LIST:  _data.up_list.~unique_ptr<list>(); break;
-  }
-}
-
-
-object& object::operator=(object&& other) {
-  if (this == &other) return *this; // guard against self-assignment
-
-  /* destroy our current resources, then move resources from other, and return new self */
-  destroy();
-  _type = other._type;
-
-  switch (other._type) {
-    case NIL:       break;
-    case STRING:    _data.s = other._data.s; break;
-    case INTEGER:   _data.i = other._data.i; break;
-    case DATE:      _data.d = other._data.d; break;
-    case DECIMAL:   _data.f = other._data.f; break;
-    case BINARY_OP: _data.o = other._data.o; break;
-    case BLOCK:     new (&_data.up_block) std::unique_ptr<block>(std::move(other._data.up_block)); break;
-    case LIST:      new (&_data.up_list)  std::unique_ptr<list>(std::move(other._data.up_list));   break;
-  }
-
-  _loc = other._loc;
-  return *this;
-}
-
-
-list::list(parser& prs) {
+list::list(parser& prs)
+{
   token t;
-  while (true) {
+
+  while (true)
+  {
     prs.next(&t);
 
     if (t.type() == token::QSTR || t.type() == token::STR)
-      _vec.emplace_back( prs.strdup(t.text()), t.loc() );
+      _v.emplace_back( t.text(), t.loc() );
     else if (t.type() == token::INTEGER)
-      _vec.emplace_back( atoi(t.text()), t.loc() );
+      _v.emplace_back( atoi(t.text()), t.loc() );
     else if (t.type() == token::DECIMAL)
-      _vec.emplace_back( fp3{ t.text() }, t.loc() );
+      _v.emplace_back( fp3{ t.text() }, t.loc() );
     else if (t.type() == token::OPEN)
-      _vec.emplace_back( std::make_unique<block>(prs), t.loc() );
+      _v.emplace_back( std::make_unique<block>(prs), t.loc() );
     else if (t.type() != token::CLOSE)
       prs.unexpected_token(t);
     else
@@ -169,27 +142,33 @@ list::list(parser& prs) {
 }
 
 
-void parser::next_expected(token* p_tok, uint type) {
+void parser::next_expected(token* p_tok, uint type)
+{
   next(p_tok, (type == token::END));
 
   if (p_tok->type() != type)
     throw err(p_tok->loc(), "Expected {} token but got {} -- '{}'",
-          token::TYPE_MAP[type], p_tok->type_name(), (p_tok->text()) ? p_tok->text() : "");
+              token::TYPE_MAP[type], p_tok->type_name(), (p_tok->text()) ? p_tok->text() : "");
 }
 
 
-void parser::unexpected_token(const token& t) const {
+void parser::unexpected_token(const token& t) const
+{
   throw err(t.loc(), "Unexpected token type {}", t.type_name());
 }
 
 
-bool parser::next(token* p_tok, bool eof_ok) {
-  if (_tq_n == 0) {
+bool parser::next(token* p_tok, bool eof_ok)
+{
+  if (_tq_n == 0)
+  {
     if (_tq_done) return false;
+
     // nothing in queue and not done, so read directly from scanner buffer into p_tok (avoids token text copy)
     _tq_done = !( _lex.read_token_into(*p_tok) );
   }
-  else {
+  else
+  {
     // token(s) are in lookahead queue, so drain that rather than lexer. as long as there are tokens in the queue,
     // we've got work to do (regardless of _tq_done).
 
@@ -214,32 +193,143 @@ bool parser::next(token* p_tok, bool eof_ok) {
 }
 
 
-void block::print(std::ostream& os, uint indent) const {
-  for (auto&& stmt : _vec)
+const char* object::type_string() const noexcept
+{
+  switch (_type)
+  {
+    case NIL:       return "null";
+    case INTEGER:   return "integer";
+    case DATE:      return "date";
+    case DECIMAL:   return "decimal";
+    case BINARY_OP: return "operator";
+    case STRING:    return "string";
+    case BLOCK:     return "block";
+    case LIST:      return "list";
+  }
+
+  return "invalid";
+}
+
+
+void object::destroy() noexcept
+{
+  switch (_type)
+  {
+    case NIL:
+    case INTEGER:
+    case DATE:
+    case DECIMAL:
+    case BINARY_OP:
+      break;
+    case STRING: _data.cs.~cstr8();                  break;
+    case BLOCK:  _data.p_block.~shared_ptr<block>(); break;
+    case LIST:   _data.p_list.~shared_ptr<list>();   break;
+  }
+
+  _type = NIL;
+}
+
+
+
+object::object(const object& other)
+: _type(other._type)
+, _loc(other._loc)
+{
+  switch (_type)
+  {
+    case NIL:       break;
+    case INTEGER:   _data.i = other._data.i; break;
+    case DATE:      _data.d = other._data.d; break;
+    case DECIMAL:   _data.f = other._data.f; break;
+    case BINARY_OP: _data.o = other._data.o; break;
+    case STRING:    new (&_data.cs)      cstr8(other._data.cs);                       break;
+    case BLOCK:     new (&_data.p_block) std::shared_ptr<block>(other._data.p_block); break;
+    case LIST:      new (&_data.p_list)  std::shared_ptr<list>(other._data.p_list);   break;
+  }
+}
+
+
+object& object::operator=(const object& other)
+{
+  if (this == &other) return *this; // no self-assignment
+
+  /* destroy our current resources, then copy resources from other (incl. reference-counting copy-construction
+     for std::shared_ptr), and return new self */
+  destroy();
+  _type = other._type;
+  _loc = other._loc;
+
+  switch (_type)
+  {
+    case NIL:       break;
+    case INTEGER:   _data.i = other._data.i; break;
+    case DATE:      _data.d = other._data.d; break;
+    case DECIMAL:   _data.f = other._data.f; break;
+    case BINARY_OP: _data.o = other._data.o; break;
+    case STRING:    new (&_data.cs)      cstr8(other._data.cs);                       break;
+    case BLOCK:     new (&_data.p_block) std::shared_ptr<block>(other._data.p_block); break;
+    case LIST:      new (&_data.p_list)  std::shared_ptr<list>(other._data.p_list);   break;
+  }
+
+  return *this;
+}
+
+
+object& object::operator=(object&& other) {
+  if (this == &other) return *this; // no self-assignment
+
+  /* destroy our current resources, then move resources from other, and return new self */
+  destroy();
+  _type = other._type;
+  _loc = other._loc;
+
+  switch (_type)
+  {
+    case NIL:       break;
+    case INTEGER:   _data.i = other._data.i; break;
+    case DATE:      _data.d = other._data.d; break;
+    case DECIMAL:   _data.f = other._data.f; break;
+    case BINARY_OP: _data.o = other._data.o; break;
+    case STRING:    new (&_data.cs)      cstr8(std::move(other._data.cs));                       break;
+    case BLOCK:     new (&_data.p_block) std::shared_ptr<block>(std::move(other._data.p_block)); break;
+    case LIST:      new (&_data.p_list)  std::shared_ptr<list>(std::move(other._data.p_list));   break;
+  }
+
+  return *this;
+}
+
+
+void block::print(std::ostream& os, uint indent) const
+{
+  for (auto&& stmt : _v)
     stmt.print(os, indent);
 }
 
 
-void list::print(std::ostream& os, uint indent) const {
-  for (auto&& obj : _vec) {
+void list::print(std::ostream& os, uint indent) const
+{
+  for (auto&& obj : _v)
+  {
     obj.print(os, indent);
     os << ' ';
   }
 }
 
 
-void statement::print(std::ostream& os, uint indent) const {
+void statement::print(std::ostream& os, uint indent) const
+{
   os << std::setfill(' ') << std::setw(indent) << "";
   _k.print(os, indent);
-  os << " = ";
+  os << " = "; // FIXME: need the string representation of the actual operator type since we now have many
   _v.print(os, indent);
   os << std::endl;
 }
 
 
-void object::print(std::ostream& os, uint indent) const {
-
-  if (_type == STRING) {
+void object::print(std::ostream& os, uint indent) const
+{
+  if (_type == STRING)
+  {
     if (strpbrk(as_string(), " \t\r\n\'"))
       os << '"' << as_string() << '"';
     else
@@ -251,13 +341,15 @@ void object::print(std::ostream& os, uint indent) const {
     os << as_date();
   else if (_type == DECIMAL)
     os << as_decimal();
-  else if (_type == BLOCK) {
+  else if (_type == BLOCK)
+  {
     os << '{' << std::endl;
-    as_block()->print(os, indent + 4);
+    as_block()->print(os, indent + 4); // FIXME: make tab width a parse config param
     os << std::setfill(' ') << std::setw(indent) << "";
     os << '}';
   }
-  else if (_type == LIST) {
+  else if (_type == LIST)
+  {
     os << "{ ";
     as_list()->print(os, indent);
     os << '}';
@@ -270,7 +362,8 @@ void object::print(std::ostream& os, uint indent) const {
 /* not handled directly by scanner because there are some things that look like titles
    and are not, but these aberrations (e.g., mercenary composition tags) only appear on
    the RHS of statements. */
-bool looks_like_title(const char* s) {
+bool looks_like_title(const char* s)
+{
   if (strlen(s) < 3)
     return false;
 

@@ -13,8 +13,11 @@ NAMESPACE_CK2;
 class FileLocation : public Location {
   using Base = Location;
 public:
-  FileLocation(const fs::path& path_, const Location& loc_) : Base(loc_), _path(path_) {}
-  FileLocation(const fs::path& path_, uint line_ = 0, uint col_ = 0) : Base(line_, col_), _path(path_) {}
+  FileLocation(const fs::path& path_, const Location& loc_)
+  : Base(loc_), _path(path_) {}
+
+  FileLocation(const fs::path& path_, uint line_ = 0/*, uint col_ = 0 */)
+  : Base(line_/*, col_*/), _path(path_) {}
 
   auto const& path() const noexcept { return _path; }
   auto&       path()       noexcept { return _path; }

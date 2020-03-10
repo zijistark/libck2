@@ -9,7 +9,7 @@ vars.Add(
 )
 
 env = Environment(variables = vars)
-env.Append(CCFLAGS='-Wall -Wno-unused-function -Werror')
+env.Append(CCFLAGS='-Wall -Werror -Wno-conversion -Wno-unused-function')
 env.Append(CXXFLAGS='-std=c++17')
 
 if env['BUILD_TYPE'] == 'debug_max':
@@ -23,7 +23,7 @@ elif env['BUILD_TYPE'] == 'release_debug':
     env.Append(CXXFLAGS='-g -O2')
 elif env['BUILD_TYPE'] == 'release':
     env.Append(CPPDEFINES=['RELEASE', 'NDEBUG'])
-    env.Append(CXXFLAGS='-g0 -s -O5 -ffast-math')
+    env.Append(CXXFLAGS='-g0 -s -Ofast -ffast-math')
 
 # NOTE: only need the static linkage on mingw64 for boost_filesystem & its dependency, boost_system. otherwise, we can remove it.
 env.Append(LINKFLAGS='-static')

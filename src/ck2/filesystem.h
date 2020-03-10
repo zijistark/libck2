@@ -4,9 +4,9 @@
 #include <cstdio>
 #include <memory>
 #include <string>
+#include <filesystem>
 
 #include "common.h"
-#include <boost/filesystem.hpp>
 
 
 // this header exists foremost as a compilation proxy between the different not-quite-there-yet C++17
@@ -18,7 +18,7 @@
 NAMESPACE_CK2;
 
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 using unique_file_ptr = std::unique_ptr< std::FILE, int (*)(std::FILE*) >;
 
 
